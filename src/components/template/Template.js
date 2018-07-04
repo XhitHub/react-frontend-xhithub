@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './style.css';
+import $ from 'jquery';
 
 class Template extends Component {
   constructor(props) {
@@ -8,6 +9,10 @@ class Template extends Component {
       this.state = {
          stateField1: "stateField1 value"
       }
+   }
+
+   handleChange(e){
+     global.handleInputChange(this,e);
    }
 
   componentWillMount() {
@@ -37,6 +42,13 @@ class Template extends Component {
         <h1>Template</h1>
         <p>{this.state.stateField1}</p>
         <p>{this.props.propsField1}</p>
+        <input
+            className="form-control"
+            placeholder="Username"
+            name="username"
+            type="text"
+            onChange={this.handleChange.bind(this)}
+        />
       </div>
     );
   }

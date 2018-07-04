@@ -1,0 +1,80 @@
+.flex-container {
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: nowrap;
+    -ms-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-align-content: stretch;
+    -ms-flex-line-pack: stretch;
+    align-content: stretch;
+    -webkit-align-items: flex-start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    height: 600px;
+    }
+
+.flex-item:nth-child(1) {
+    -webkit-order: 0;
+    -ms-flex-order: 0;
+    order: 0;
+    -webkit-flex: 0 1 auto;
+    -ms-flex: 0 1 auto;
+    flex: 0 1 auto;
+    -webkit-align-self: center;
+    -ms-flex-item-align: center;
+    align-self: center;
+    }
+
+.login-box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+.card{
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 0.8rem;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+}
+
+h1{
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.form-item{
+  display: flex;
+    padding: 5px;
+    margin-bottom: 2rem;
+    height: 30px;
+    width: 16rem;
+    border: 1px solid grey;
+}
+
+.form-submit{
+    height: 35px;
+    color: #fff;
+    border: none;
+    letter-spacing: 0.2rem;
+    transition: 0.3s opacity ease;
+    cursor: pointer;
+}
+.form-submit:hover{
+   opacity: 0.6;
+}
