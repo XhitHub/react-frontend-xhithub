@@ -23,13 +23,10 @@ global.handleInputChange = function(componentThis,e){
     }
   );
 };
-global.simpleAjax = function(path,type,success){
+global.simpleAjax = function(optionsExtra){
   var options = {
-      url: global.apiUrl+path,
-      type: type,
       dataType: 'json',
       contentType: 'application/json',
-      success: success,
       error: (err) => {
         console.log('err', err);
         if(err.status == 401){
@@ -39,6 +36,9 @@ global.simpleAjax = function(path,type,success){
       },
       headers: {"Authorization": 'Bearer ' + localStorage.getItem('token')}
   };
+  for (var key in optionsExtra) {
+    options[key] = optionsExtra[key];
+  }
   $.ajax(options);
 }
 

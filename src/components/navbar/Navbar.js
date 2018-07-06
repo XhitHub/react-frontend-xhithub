@@ -34,11 +34,16 @@ class Navbar extends Component {
       console.log('Component DID MOUNT!')
       // $("#myModal").modal('show');
       if(localStorage.getItem('token')){
-        global.simpleAjax('users/current-user','get',(data) => {
-          this.setState({
-            user: data
-          });
-        });
+        var opts = {
+          url: global.apiUrl + 'users/current-user',
+          type: 'get',
+          success: (data) => {
+            this.setState({
+              user: data
+            });
+          }
+        }
+        global.simpleAjax(opts);
       }
    }
    componentWillReceiveProps(newProps) {
@@ -145,6 +150,7 @@ class Navbar extends Component {
       account = (
         <div className="nav-item dropdown account-dropdown">
            <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
            {this.state.user.username}
            </a>
            <div className="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -158,7 +164,7 @@ class Navbar extends Component {
       )
     }
     else{
-      buttons = (
+      account = (
         <div className="right-flex">
          <a className="nav-link pointer" data-toggle="modal" data-target="#myModal">Login</a>
 

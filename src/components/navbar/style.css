@@ -83,5 +83,6 @@ h1{
 }
 
 .account-dropdown{
-  left: -120px;
+  /* left: -120px; */
+  width: 150px;
 }
