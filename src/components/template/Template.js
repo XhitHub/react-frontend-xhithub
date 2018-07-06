@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './style.css';
 import $ from 'jquery';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
 class Template extends Component {
   constructor(props) {
