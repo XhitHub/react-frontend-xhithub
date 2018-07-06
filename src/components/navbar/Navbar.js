@@ -33,6 +33,13 @@ class Navbar extends Component {
    componentDidMount() {
       console.log('Component DID MOUNT!')
       // $("#myModal").modal('show');
+      if(localStorage.getItem('token')){
+        global.simpleAjax('users/current-user','get',(data) => {
+          this.setState({
+            user: data
+          });
+        });
+      }
    }
    componentWillReceiveProps(newProps) {
       console.log('Component WILL RECIEVE PROPS!')
@@ -82,11 +89,8 @@ class Navbar extends Component {
                loginFailed: false
              });
              $.ajax({
-                 url: global.apiUrl+'users',
-                 // crossDomain: true,
+                 url: global.apiUrl+'users/current-user',
                  type: 'GET',
-                 // Authorization: 'Bearer ' + localStorage.getItem('token'),
-                 // headers: {"Authorization": localStorage.getItem('token')},
                  dataType: 'json',
                  contentType: 'application/json',
                  success: (data) => {
@@ -94,12 +98,10 @@ class Navbar extends Component {
                      user: data
                    })
                  },
-                 headers: {"Authorization": 'Bearer ' + localStorage.getItem('token')},
-                 // beforeSend: function(xhr, settings) {
-                 //   // xhr.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('token'));
-                 //   xhr.setRequestHeader('asd','qwe');
-                 //   // console.log('xhr.getResponseHeader',xhr.getResponseHeader());
-                 // }
+                 error: (err) => {
+                   console.log('err', err);
+                 },
+                 headers: {"Authorization": 'Bearer ' + localStorage.getItem('token')}
              });
            }
            else{
@@ -114,8 +116,13 @@ class Navbar extends Component {
           })
      });
    }
+   logout(){
+     localStorage.removeItem('token');
+     window.location.href = global.appUrl;
+   }
   render() {
     var buttons;
+    var account;
     if(this.state.user){
       buttons = (
         <ul className="navbar-nav mr-auto">
@@ -127,25 +134,27 @@ class Navbar extends Component {
            </li>
            <li className="nav-item">
               <a className="nav-link">
-                 <Link to={'/knowledge-groups'}>
-                 Knowledge groups</Link>
+                 <Link to={'/knowledge-groups'}>Knowledge groups</Link>
               </a>
-           </li>
-           <li className="nav-item dropdown">
-              <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Dropdown
-              </a>
-              <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                 <a className="dropdown-item" href="#">Action</a>
-                 <a className="dropdown-item" href="#">Another action</a>
-                 <div className="dropdown-divider"></div>
-                 <a className="dropdown-item" href="#">Something else here</a>
-              </div>
            </li>
            <li className="nav-item">
               <a className="nav-link disabled" href="#">Disabled</a>
            </li>
         </ul>
+      )
+      account = (
+        <div className="nav-item dropdown account-dropdown">
+           <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+           {this.state.user.username}
+           </a>
+           <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+               <a className="nav-link">
+                  <Link to={'/profile'}>Profile</Link>
+               </a>
+              <div className="dropdown-divider"></div>
+              <a className="dropdown-item pointer" onClick={this.logout.bind(this)}>Logout</a>
+           </div>
+        </div>
       )
     }
     else{
@@ -165,6 +174,9 @@ class Navbar extends Component {
             </button>
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
                {buttons}
+            </div>
+            <div className="collapse navbar-collapse flex-end-container" id="div-account">
+               {account}
             </div>
          </nav>
 

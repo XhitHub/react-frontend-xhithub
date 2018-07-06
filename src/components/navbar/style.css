@@ -82,6 +82,6 @@ h1{
    opacity: 0.6;
 }
 
-.right-flex{
-  justify-content: flex-end;
+.account-dropdown{
+  left: -120px;
 }

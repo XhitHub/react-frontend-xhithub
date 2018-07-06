@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import config from 'react-global-configuration';
 import logo from './logo.svg';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import './App.css';
+import $ from 'jquery';
 
+import './App.css';
 import Template from './components/template/Template';
 import Navbar from './components/navbar/Navbar';
 import Login from './components/login/Login';
@@ -14,6 +15,7 @@ config.set({ apiUrl: 'http://localhost:3000/' });
 //   apiUrl: 'http://localhost:3000/'
 // }
 global.apiUrl = 'http://localhost:3000/';
+global.appUrl = 'http://localhost:3001/';
 global.handleInputChange = function(componentThis,e){
   componentThis.setState(
     {
@@ -21,6 +23,24 @@ global.handleInputChange = function(componentThis,e){
     }
   );
 };
+global.simpleAjax = function(path,type,success){
+  var options = {
+      url: global.apiUrl+path,
+      type: type,
+      dataType: 'json',
+      contentType: 'application/json',
+      success: success,
+      error: (err) => {
+        console.log('err', err);
+        if(err.status == 401){
+          localStorage.removeItem('token');
+          window.location.href = global.appUrl;
+        }
+      },
+      headers: {"Authorization": 'Bearer ' + localStorage.getItem('token')}
+  };
+  $.ajax(options);
+}
 
 class App extends Component {
   render() {
