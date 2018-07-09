@@ -22,20 +22,6 @@ class KnowledgeGroups extends Component {
       console.log('Component WILL MOUNT!')
    }
    componentDidMount() {
-      // console.log('Component DID MOUNT!')
-      // console.log('global.apiUrl',global.apiUrl);
-      // $.ajax({
-      //     url: global.apiUrl+'knowledge/get-knowledge-group',
-      //     type: 'post',
-      //     dataType: 'json',
-      //     contentType: 'application/json',
-      //     success: function (data) {
-      //         this.setState({knowledgeGroups: data});
-      //     },
-      //     data: {
-      //     	"tags": ["thrower","asd"]
-      //     }
-      // });
       var opts = {
         url: global.apiUrl + 'knowledge/get-knowledge-group',
         type: 'post',
@@ -85,6 +71,8 @@ class KnowledgeGroups extends Component {
         <ReactTable
           data={this.state.knowledgeGroups}
           columns={columns}
+          defaultPageSize="15"
+          pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
         />
       </div>
     );
