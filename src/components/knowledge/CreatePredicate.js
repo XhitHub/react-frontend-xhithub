@@ -34,6 +34,8 @@ class CreatePredicate extends Component {
       this.state = {
          predicatePack: predicatePack
       }
+
+      this.toggleSynonymIsValid = this.toggleSynonymIsValid.bind(this);
    }
 
    handleChange(e){
@@ -115,51 +117,103 @@ class CreatePredicate extends Component {
      global.simpleAjax(opts);
    }
 
+   toggleSynonymIsValid(syn){
+     syn.isValid = !syn.isValid;
+     console.log('this.state.altFormInfo', this.state.altFormInfo);
+     this.setState({
+       altFormInfo: this.state.altFormInfo
+     });
+   }
+
+   generateAltFormFinalInfo(){
+     var allSynonymsDict = {}
+     var allSynonymsList = []
+     var sets = ['textSynonyms','argumentsSynonyms'];
+     sets.forEach((setStr) => {
+       var synsDict = this.state.altFormInfo[setStr];
+       for (var k in synsDict){
+         var arr = []
+         synsDict[k].forEach((wordSyn) => {
+           if(wordSyn.isValid){
+             arr.push(wordSyn.name);
+             allSynonymsList.push(wordSyn.name)
+           }
+         })
+         allSynonymsDict[k] = arr;
+       }
+     });
+     console.log('allSynonymsDict',allSynonymsDict);
+     console.log('allSynonymsList',allSynonymsList);
+     this.setState({
+       allSynonymsDict: allSynonymsDict,
+       allSynonymsList: allSynonymsList
+     })
+   }
+
   render() {
     var pp = this.state.predicatePack;
 
     var synonymsSection;
     if(this.state.altFormInfo){
-      var ts = this.state.altFormInfo.textSynonyms
+      var sets = ['textSynonyms','argumentsSynonyms'];
       var synViews = [];
-      for (var key in ts) {
-          if (ts.hasOwnProperty(key)) {
-              var arr = ts[key]
-              var keySynViews = []
-              arr.forEach((syn) => {
-                keySynViews.push(
-                  <tr>
-                    <td>{syn.name.split('.')[0]}</td>
-                    <td>{syn.name.split('.')[1]}</td>
-                    <td>{syn.definition}</td>
-                    <td>
-                    <input type="check" />
-                    </td>
-                  </tr>
-                )
-              });
-              synViews.push(
-                <div class="card">
-                  <div class="card-header">
-                  {key}
-                  </div>
-                  <div class="card-body">
-                    <table class="table">
-                      {keySynViews}
-                    </table>
-                  </div>
-                </div>
-              )
-          }
-      }
+      sets.forEach((setStr) => {
+        var ts = this.state.altFormInfo[setStr];
+        for (var key in ts) {
+            if (ts.hasOwnProperty(key)) {
+                var arr = ts[key]
+                if(arr.length > 0){
+                  var keySynViews = []
+                  arr.forEach((syn) => {
+                    var btn;
+                    if(syn.isValid){
+                      btn = (
+                        <input type="button" class="btn btn-success" value="Valid" onClick={()=>{this.toggleSynonymIsValid(syn)}} />
+                      )
+                    }
+                    else{
+                      btn = (
+                        <input type="button" class="btn btn-fail" value="invalid" onClick={()=>{this.toggleSynonymIsValid(syn)}} />
+                      )
+                    }
+                    keySynViews.push(
+                      <tr>
+                        <td>{syn.name.split('.')[0]}</td>
+                        <td>{syn.name.split('.')[1]}</td>
+                        <td>{syn.definition}</td>
+                        <td>
+                        {btn}
+                        </td>
+                      </tr>
+                    )
+                  });
+                  synViews.push(
+                    <div class="card">
+                      <div class="card-header">
+                      {key}
+                      </div>
+                      <div class="card-body">
+                        <table class="table">
+                          {keySynViews}
+                        </table>
+                      </div>
+                    </div>
+                  )
+                }
+            }
+        }
+      })
+
       synonymsSection = (
         <div className="row">
-        <div className="col col-lg-12">
-        <h3>
-        Pick fitting synonyms
-        </h3>
-        </div>
-        {synViews}
+          <div className="col col-lg-12">
+          <h3>Step 2: Pick suitable synonyms</h3>
+          </div>
+          {synViews}
+          <div className="col col-lg-12 text-center">
+          <button id="singlebutton2" name="singlebutton" class="btn btn-primary" onClick={this.generateAltFormFinalInfo.bind(this)}>Confirm synonyms</button>
+          </div>
+          <hr />
         </div>
       )
     }
@@ -167,6 +221,7 @@ class CreatePredicate extends Component {
     return (
       <div className="col col-lg-12">
         <h1>Create predicate</h1>
+        <h3>Step 1: basic info</h3>
         <div className="row">
           <div class="col-md-6 col-sm-6 col-xs-12">
 
@@ -174,14 +229,14 @@ class CreatePredicate extends Component {
                 <label class="control-label " for="message">
                  Predicate sentence / function name
                 </label>
-                <textarea class="form-control" cols="40" id="message" name="text" rows="10" onChange={this.updatePredicate.bind(this)}></textarea>
+                <textarea class="form-control" cols="40" id="message" name="text" rows="10" value="goes t" onChange={this.updatePredicate.bind(this)}></textarea>
                </div>
 
                <div class="form-group ">
                  <label class="control-label " for="name">
                   Terms / arguments
                  </label>
-                 <input class="form-control" id="name" name="name" type="text" onChange={this.updateTerms.bind(this)}/>
+                 <input class="form-control" id="name" name="name" type="text" value="home,bambo" onChange={this.updateTerms.bind(this)}/>
               </div>
 
 
@@ -204,6 +259,7 @@ class CreatePredicate extends Component {
          <div className="col col-lg-12 text-center">
          <button id="singlebutton" name="singlebutton" class="btn btn-primary" onClick={this.getSynonyms.bind(this)}>Proceed</button>
          </div>
+         <hr />
 
          {synonymsSection}
 
