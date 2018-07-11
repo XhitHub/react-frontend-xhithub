@@ -41,40 +41,11 @@ class Predicate extends Component {
    }
   render() {
     var content;
-    var p = this.state.predicate
+    var details;
+    var p = this.state.predicate;
+
     if(this.state.mode == 'READ'){
-      var argViews = []
-      p.arguments.forEach((arg) => {
-        argViews.push(
-          <li class="list-group-item">arg</li>
-        )
-      })
-      content = (
-        <div className="col col-lg-12">
-          <div className="col-lg-12 predicate-text">
-            {p.text}
-          </div>
-          <div className="col col-lg-12 predicate-arguments">
-            <ul class="list-group">
-              {argViews}
-            </ul>
-          </div>
-        </div>
-      )
-    }
-    if(this.state.mode == 'READ-EXPERT'){
-      var sent = p.text.replace(' ', '_');
-      var args = "";
-      p.arguments.forEach((arg) => {
-        args += ", " + arg
-      })
-      args = args.substring(2)
-      var raw = sent + "("+args+")";
-      content = (
-        <span>{raw}</span>
-      )
-    }
-    if(this.state.mode == 'READ'){
+      this.setState();
       var argViews = []
       p.arguments.forEach((arg) => {
         argViews.push(
@@ -94,47 +65,33 @@ class Predicate extends Component {
         </div>
       )
     }
-    if(this.state.mode == 'EDIT'){
-      var argViews = []
-      p.arguments.forEach((arg,i) => {
-        argViews.push(
-          <li class="list-group-item">
-            <input
-                className="form-item form-control"
-                name="argument"
-                index={i}
-                type="text"
-                value={arg}
-                onChange={this.props.handleChange.bind(this)}
-            />
-          </li>
-        )
+
+    if(this.state.mode == 'READ-FOL'){
+      var sent = p.text.replace(' ', '_');
+      var args = "";
+      p.arguments.forEach((arg) => {
+        args += ", " + arg
       })
+      args = args.substring(2)
+      var raw = sent + "("+args+")";
       content = (
-        <div className="col col-lg-12">
-          <div className="col-lg-12 predicate-text">
-            <input
-                className="form-item form-control"
-                name="text"
-                type="text"
-                value={p.text}
-                onChange={this.props.handleChange.bind(this)}
-            />
-          </div>
-          <div className="col col-lg-12 predicate-arguments">
-            <ul class="list-group">
-              {argViews}
-            </ul>
-          </div>
-        </div>
+        <span>{raw}</span>
       )
     }
+
     return (
       <div className="predicate">
         {content}
+        {details}
       </div>
     );
   }
 }
+
+Predicate.defaultProps = {
+  mode: 'READ',
+  readOnly: true
+};
+
 
 export default Predicate;

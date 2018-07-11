@@ -11,6 +11,7 @@ import Login from './components/login/Login';
 import KnowledgeGroups from './components/knowledge-groups/KnowledgeGroups';
 import KnowledgeGroup from './components/knowledge-group/KnowledgeGroup';
 import CreatePredicate from './components/knowledge/CreatePredicate';
+import ManageRelatedPredicates from './components/knowledge/ManageRelatedPredicates';
 
 config.set({ apiUrl: 'http://localhost:3000/' });
 // global.config = {
@@ -78,6 +79,7 @@ class App extends Component {
              <Route exact path='/knowledge-groups' component={KnowledgeGroups} />
              <Route path='/knowledge-group/:id' component={KnowledgeGroup} />
              <Route path='/create-predicate/:kgid' component={CreatePredicate} />
+             <Route path='/manage-related-predicates/:id' component={ManageRelatedPredicates} />
            </Switch>
         </div>
         </div>

@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import './style.css';
 import $ from 'jquery';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { withRouter } from "react-router-dom";
 import Binder from 'react-binding';
 
 import Predicate from './Predicate';
+var Combinatorics = require('js-combinatorics');
+
 
 class CreatePredicate extends Component {
   constructor(props) {
@@ -95,7 +98,7 @@ class CreatePredicate extends Component {
      predicate.arguments = args;
      this.setState(
        {
-         predicate: predicate
+         predicatePack: this.state.predicatePack
        }
      );
    }
@@ -139,6 +142,11 @@ class CreatePredicate extends Component {
              allSynonymsList.push(wordSyn.name)
            }
          })
+         //add key if no syns for the word
+         if(arr.length == 0){
+           arr.push(k);
+           allSynonymsList.push(k)
+         }
          allSynonymsDict[k] = arr;
        }
      });
@@ -146,14 +154,37 @@ class CreatePredicate extends Component {
      console.log('allSynonymsList',allSynonymsList);
      this.setState({
        allSynonymsDict: allSynonymsDict,
-       allSynonymsList: allSynonymsList
+       allSynonymsList: allSynonymsList,
+       readyToSubmit: true
      })
    }
+
+   submit(){
+     var predPack = this.state.predicatePack;
+     // var pred = this.state.predicate;
+     predPack.altFormInfo = {
+       allSynonymsDict: this.state.allSynonymsDict,
+       allSynonymsList: this.state.allSynonymsList
+     }
+     var opts = {
+       url: global.apiUrl + 'knowledge/predicate/',
+       type: 'post',
+       success: (data) => {
+         alert('Predicate created successfully.');
+         this.props.history.push('/manage-related-predicates/'+data._id);
+       },
+       data: JSON.stringify(predPack)
+     }
+     global.simpleAjax(opts);
+   }
+
+
 
   render() {
     var pp = this.state.predicatePack;
 
     var synonymsSection;
+    var infoSection;
     if(this.state.altFormInfo){
       var sets = ['textSynonyms','argumentsSynonyms'];
       var synViews = [];
@@ -208,12 +239,31 @@ class CreatePredicate extends Component {
         <div className="row">
           <div className="col col-lg-12">
           <h3>Step 2: Pick suitable synonyms</h3>
-          </div>
           {synViews}
+          </div>
           <div className="col col-lg-12 text-center">
           <button id="singlebutton2" name="singlebutton" class="btn btn-primary" onClick={this.generateAltFormFinalInfo.bind(this)}>Confirm synonyms</button>
           </div>
           <hr />
+        </div>
+      )
+    }
+
+    if(this.state.readyToSubmit){
+      infoSection = (
+        <div className="row">
+        <div className="col col-lg-12">
+        <h3>Step 3: Additional information</h3>
+        <div class="form-group ">
+         <label class="control-label " for="message">
+          Description
+         </label>
+         <textarea class="form-control" cols="40" id="message" name="description" rows="10" onChange={this.updateInfo.bind(this)}></textarea>
+        </div>
+        <div className="col col-lg-12 text-center">
+        <button id="btn-submit" name="singlebutton" class="btn btn-primary" onClick={this.submit.bind(this)}>Create predicate</button>
+        </div>
+        </div>
         </div>
       )
     }
@@ -249,7 +299,7 @@ class CreatePredicate extends Component {
               <div className="card-body">
               <Predicate
                 predicate={pp.predicate}
-                mode="READ-EXPERT"
+                mode="READ-FOL"
                 readOnly="true"
               />
               </div>
@@ -257,22 +307,13 @@ class CreatePredicate extends Component {
            </div>
          </div>
          <div className="col col-lg-12 text-center">
-         <button id="singlebutton" name="singlebutton" class="btn btn-primary" onClick={this.getSynonyms.bind(this)}>Proceed</button>
+         <button id="singlebutton" name="singlebutton" class="btn btn-primary" onClick={this.getSynonyms.bind(this)}>Next step</button>
          </div>
          <hr />
 
          {synonymsSection}
+         {infoSection}
 
-         <div className="row">
-         <div className="col col-lg-12">
-         <div class="form-group ">
-          <label class="control-label " for="message">
-           Description
-          </label>
-          <textarea class="form-control" cols="40" id="message" name="description" rows="10" onChange={this.updateInfo.bind(this)}></textarea>
-         </div>
-         </div>
-         </div>
 
 
 
@@ -284,4 +325,4 @@ class CreatePredicate extends Component {
   }
 }
 
-export default CreatePredicate;
+export default withRouter(CreatePredicate);
