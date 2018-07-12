@@ -11,6 +11,7 @@ import Login from './components/login/Login';
 import KnowledgeGroups from './components/knowledge-groups/KnowledgeGroups';
 import KnowledgeGroup from './components/knowledge-group/KnowledgeGroup';
 import CreatePredicate from './components/knowledge/CreatePredicate';
+import CreateRule from './components/knowledge/CreateRule';
 import ManageRelatedPredicates from './components/knowledge/ManageRelatedPredicates';
 
 config.set({ apiUrl: 'http://localhost:3000/' });
@@ -45,6 +46,9 @@ global.handleInputChange1N = function(componentThis,keysArr,e){
     }
   );
 };
+global.isPredicate = function(obj){
+  return obj.text;
+}
 global.simpleAjax = function(optionsExtra){
   var options = {
       dataType: 'json',
@@ -80,6 +84,7 @@ class App extends Component {
              <Route path='/knowledge-group/:id' component={KnowledgeGroup} />
              <Route path='/create-predicate/:kgid' component={CreatePredicate} />
              <Route path='/manage-related-predicates/:id' component={ManageRelatedPredicates} />
+             <Route path='/create-rule/:kgid' component={CreateRule} />
            </Switch>
         </div>
         </div>

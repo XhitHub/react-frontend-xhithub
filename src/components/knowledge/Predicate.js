@@ -80,7 +80,7 @@ class Predicate extends Component {
     }
 
     return (
-      <div className="predicate">
+      <div className="predicate pointer">
         {content}
         {details}
       </div>

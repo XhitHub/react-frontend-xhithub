@@ -71,9 +71,21 @@ class KnowledgeGroup extends Component {
               </div>
             </div>
             <div className="card-body">
+            </div>
+          </div>
 
-              <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              <a href="#" className="btn btn-primary">Go somewhere</a>
+          <div className="card">
+            <div className="card-header">
+              <div className="row">
+                <div className="offset-md-3 col-md-6">
+                  <h4 class="pull-left">Rules</h4>
+                </div>
+                <div className="col-md-3 pull-right">
+                  <Link to={'/create-rule/'+kg._id}>Create</Link>
+                </div>
+              </div>
+            </div>
+            <div className="card-body">
             </div>
           </div>
 

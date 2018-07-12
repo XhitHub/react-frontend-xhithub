@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './style.css';
 import $ from 'jquery';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { withRouter } from "react-router-dom";
+
 import PredicatePack from './PredicatePack';
 import Predicate from './Predicate';
 
@@ -71,6 +73,9 @@ class ManageRelatedPredicates extends Component {
      predWordsPowerSet = predWordsPowerSet.filter((item)=>{
        return item.length > 0;
      })
+     predWordsPowerSet.sort((a,b)=>{
+       return -( a.length - b.length )
+     })
      predWordsPowerSet.forEach((words) => {
        var wordsSyns = [];
        words.forEach((word)=>{
@@ -95,20 +100,21 @@ class ManageRelatedPredicates extends Component {
                relatedPredicates: data
              }
              data.forEach((relatedPredicatePack)=>{
-               var obj = {
-                 relatedPredicatePack: relatedPredicatePack,
-                 matchCount: words.length
-               }
+               // var obj = {
+               //   relatedPredicatePack: relatedPredicatePack,
+               //   matchCount: words.length
+               // }
+               relatedPredicatePack.matchCount = words.length
                if(!relatedPredsList.find((item)=>{
-                 return item.relatedPredicatePack._id == relatedPredicatePack._id;
+                 return item._id == relatedPredicatePack._id;
                })){
-                 relatedPredsList.push(obj);
+                 relatedPredsList.push(relatedPredicatePack);
                }
              })
              relatedPreds.push(relatedPredsItem);
            }
            relatedPredsList.sort((a,b)=>{
-             return a.matchCount - b.matchCount;
+             return -( a.matchCount - b.matchCount );
            })
            this.setState({
              relatedPredicates: relatedPreds,
@@ -120,9 +126,21 @@ class ManageRelatedPredicates extends Component {
      })
    }
 
-   togglePredicateIsRelated(pred){
-     pred.isRelated = !pred.isRelated;
+   togglePredicateIsRelated(predPack){
+     predPack.isRelated = !predPack.isRelated;
      this.setState({});
+   }
+
+   confirmRelatedPredicates(){
+     var relatedPreds = [];
+     this.state.relatedPredicatesList.forEach((pp)=>{
+       if(pp.isRelated){
+         relatedPreds.push(pp);
+       }
+     });
+     console.log('confirmRelatedPredicates this.state.relatedPredicatesList',this.state.relatedPredicatesList);
+     console.log('confirmRelatedPredicates relatedPreds',relatedPreds);
+     localStorage.setItem('predicatesPacksPool',relatedPreds);
    }
 
   render() {
@@ -146,16 +164,16 @@ class ManageRelatedPredicates extends Component {
       if(relatedPredsList.length > 0 ){
         var relatedPredsViewItems = [];
         relatedPredsList.forEach((obj)=>{
-          var pred = obj.relatedPredicatePack.predicate;
+          var pred = obj.predicate;
           var btn;
-          if(pred.isRelated){
+          if(obj.isRelated){
             btn = (
-              <input type="button" class="btn btn-success" value="Is related" onClick={()=>{this.togglePredicateIsRelated(pred)}} />
+              <input type="button" class="btn btn-success" value="Is related" onClick={()=>{this.togglePredicateIsRelated(obj)}} />
             )
           }
           else{
             btn = (
-              <input type="button" class="btn btn-fail" value="Not related" onClick={()=>{this.togglePredicateIsRelated(pred)}} />
+              <input type="button" class="btn btn-fail" value="Not related" onClick={()=>{this.togglePredicateIsRelated(obj)}} />
             )
           }
           relatedPredsViewItems.push(
@@ -193,12 +211,16 @@ class ManageRelatedPredicates extends Component {
         <h4>The predicate:</h4>
         {predicateInfo}
         <hr />
-        <h4>Potential related predicates</h4>
+        <h4>Potentially related predicates</h4>
         {relatedPredicatesView}
+        <hr />
+        <div className="col col-lg-12 text-center">
+          <button class="btn btn-primary" onClick={this.confirmRelatedPredicates.bind(this)}>Confirm related predicates</button>
+        </div>
       </div>
 
     );
   }
 }
 
-export default ManageRelatedPredicates;
+export default withRouter(ManageRelatedPredicates);

@@ -279,14 +279,14 @@ class CreatePredicate extends Component {
                 <label class="control-label " for="message">
                  Predicate sentence / function name
                 </label>
-                <textarea class="form-control" cols="40" id="message" name="text" rows="10" value="goes t" onChange={this.updatePredicate.bind(this)}></textarea>
+                <textarea class="form-control" cols="40" id="message" name="text" rows="10" onChange={this.updatePredicate.bind(this)}></textarea>
                </div>
 
                <div class="form-group ">
                  <label class="control-label " for="name">
                   Terms / arguments
                  </label>
-                 <input class="form-control" id="name" name="name" type="text" value="home,bambo" onChange={this.updateTerms.bind(this)}/>
+                 <input class="form-control" id="name" name="name" type="text" onChange={this.updateTerms.bind(this)}/>
               </div>
 
 
