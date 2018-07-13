@@ -7,3 +7,9 @@ textarea {
   border-style: solid;
   border-width: thick;
 }
+
+#rule-control-panel{
+  position: fixed;
+  left: 150px;
+  top: 150px;
+}

@@ -187,3 +187,46 @@ if(selectItem){
     }
   }
 }
+
+
+
+
+
+
+
+
+
+
+and:[
+  {
+    text: 'goes to',
+    arguments: [
+      'home', 'school'
+    ]
+  },
+  {
+    text: 'back to',
+    arguments: [
+      'home', 'school'
+    ]
+  },
+  {
+    or:[
+      {
+        not: {
+          and:[
+            {
+              text: 'goes to',
+              arguments: [
+                'home', 'school'
+              ]
+            }
+          ]
+
+        }
+      }
+
+    ]
+  }
+
+]

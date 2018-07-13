@@ -13,39 +13,7 @@ class CreateRule extends Component {
       this.state = {
          rule: {
            lhs:{
-             and:[
-               {
-                 text: 'goes to',
-                 arguments: [
-                   'home', 'school'
-                 ]
-               },
-               {
-                 text: 'back to',
-                 arguments: [
-                   'home', 'school'
-                 ]
-               },
-               {
-                 or:[
-                   {
-                     not: {
-                       and:[
-                         {
-                           text: 'goes to',
-                           arguments: [
-                             'home', 'school'
-                           ]
-                         }
-                       ]
-
-                     }
-                   }
-
-                 ]
-               }
-
-             ]
+            
            },
            rhs:{
 
@@ -156,7 +124,7 @@ class CreateRule extends Component {
         <div class="row">
 
         <div className="col col-md-3">
-          <div className="card">
+          <div className="card" id="rule-control-panel">
             <div className="card-header">
             Control panel
             </div>

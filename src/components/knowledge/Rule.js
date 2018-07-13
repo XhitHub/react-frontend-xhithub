@@ -37,6 +37,10 @@ class Rule extends Component {
    }
   render() {
     var rule = this.props.rule;
+    // if(formula === this.state.selectedItem){
+    //   isSelected = 'selected'
+    // }
+    // var type = 'card-header pointer '+group+' '+isSelected;
     return (
       <div className="col col-lg-12">
         <div className="col col-lg-12">
@@ -62,7 +66,7 @@ class Rule extends Component {
             RHS
           </div>
           <div className="card-body">
-            <Formula formula={rule.rhs} />
+            <Formula formula={rule.rhs} onSelectItem={this.props.onSelectItem} />
           </div>
         </div>
         </div>
