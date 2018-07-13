@@ -70,13 +70,13 @@ class Formula extends Component {
            );
          });
          var isSelected;
-         if(formula[group] === this.state.selectedItem){
+         if(formula === this.state.selectedItem){
            isSelected = 'selected'
          }
          var type = 'card-header pointer '+group+' '+isSelected;
          view = (
            <div class="card atomic-statement">
-             <div class={type} onClick={()=>{this.selectItem(formula[group])}}>
+             <div class={type} onClick={()=>{this.selectItem(formula)}}>
                {group}
              </div>
              <div class="card-body">
@@ -88,17 +88,17 @@ class Formula extends Component {
          )
        }
      });
-     var groups = ['not','lhs'];
+     var groups = ['not'];
      groups.forEach((group)=>{
        if(formula[group]){
          var isSelected;
-         if(formula[group] === this.state.selectedItem){
+         if(formula === this.state.selectedItem){
            isSelected = 'selected'
          }
          var type = 'card-header pointer '+group+' '+isSelected;
          view = (
            <div class="card atomic-statement">
-             <div class={type} onClick={()=>{this.selectItem(formula[group])}}>
+             <div class={type} onClick={()=>{this.selectItem(formula)}}>
                {group}
              </div>
              <div class="card-body">
@@ -123,7 +123,7 @@ class Formula extends Component {
      if(!view){
        view = (
          <div>
-          Empty block
+
          </div>
        );
      }

@@ -168,3 +168,22 @@ else{
     </div>
   )
 }
+
+
+
+
+var selectItem = this.state.selectedItem;
+if(selectItem){
+  if(Array.isArray(selectItem)){
+    selectItem.push(elem);
+    this.setState({});
+  }
+  else{
+    if(!(selectItem.and || selectItem.or || selectItem.not)){
+      for(var k in elem){
+        selectItem[k] = elem[k]
+      }
+      this.setState({});
+    }
+  }
+}
