@@ -5,6 +5,10 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { withRouter } from "react-router-dom";
 import Formula from "./Formula";
 import Rule from "./Rule";
+import Predicate from './Predicate';
+import PredicateSearch from "./PredicateSearch";
+import SelectableList from "../general/SelectableList";
+
 
 class CreateRule extends Component {
   constructor(props) {
@@ -13,13 +17,14 @@ class CreateRule extends Component {
       this.state = {
          rule: {
            lhs:{
-            
+
            },
            rhs:{
 
            }
          }
       }
+      this.addElement = this.addElement.bind(this);
    }
 
    handleChange(e){
@@ -118,23 +123,54 @@ class CreateRule extends Component {
    }
   render() {
     var rule = this.state.rule;
+    var memoryPredicatePacks = JSON.parse(localStorage.getItem('predicatesPacksPool'));
     return (
       <div className="col col-lg-12">
         <h1>Create edit rule</h1>
         <div class="row">
 
-        <div className="col col-md-3">
+        <div className="col col-md-4">
           <div className="card" id="rule-control-panel">
             <div className="card-header">
             Control panel
             </div>
             <div className="card-body">
-            <p>Click to add elements</p>
-            <div class="btn-group" role="group" aria-label="Add elements">
-              <button class="btn btn-default" onClick={()=>{this.addElement({and: []})}}>AND</button>
-              <button class="btn btn-default" onClick={()=>{this.addElement({or: []})}}>OR</button>
-              <button class="btn btn-default" onClick={()=>{this.addElement({not: {}})}}>NOT</button>
-            </div>
+              <p>Logical connectives</p>
+              <div class="btn-group" role="group" aria-label="Add elements">
+                <button class="btn btn-default" onClick={()=>{this.addElement({and: []})}}>AND</button>
+                <button class="btn btn-default" onClick={()=>{this.addElement({or: []})}}>OR</button>
+                <button class="btn btn-default" onClick={()=>{this.addElement({not: {}})}}>NOT</button>
+              </div>
+              <hr />
+              <p>Predicates</p>
+              <ul class="nav nav-tabs">
+                <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#memory">Memory</a></li>
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#search">Search</a></li>
+              </ul>
+              <div class="container-fluid">
+              <div class="tab-content">
+                <div role="tabpanel" id="memory" class="tab-pane fade in active">
+                  <SelectableList
+                    items={memoryPredicatePacks}
+                    getItemView={
+                      function(item){
+                        return (
+                          <Predicate predicate={item.predicate} mode="READ-FOL" />
+                        );
+                      }
+                    }
+                    onSelectItem={
+                      (item)=>{
+                        this.addElement(item.predicate);
+                      }
+                    }
+                  />
+                </div>
+                <div role="tabpanel" id="search" class="tab-pane fade">
+                  <PredicateSearch onSelectItem={this.addElement} />
+                </div>
+              </div>
+              </div>
               <hr />
               <div className="col col-lg-12 text-center">
                 <button class="btn btn-danger" onClick={this.removeElement.bind(this)}>Remove</button>
@@ -142,7 +178,7 @@ class CreateRule extends Component {
             </div>
           </div>
         </div>
-        <div className="col col-md-9">
+        <div className="col col-md-8">
           <Rule rule={rule} onSelectItem={this.onSelectItem.bind(this)} />
         </div>
 

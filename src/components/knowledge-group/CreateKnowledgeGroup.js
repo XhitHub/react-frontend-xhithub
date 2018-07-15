@@ -4,16 +4,12 @@ import $ from 'jquery';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { withRouter } from "react-router-dom";
 
-import Predicate from './Predicate';
-
-class PredicateSearch extends Component {
+class CreateKnowledgeGroup extends Component {
   constructor(props) {
       super(props);
 
       this.state = {
-         stateField1: "stateField1 value",
-         keywords: '',
-         searchResults: []
+         name: ''
       }
    }
 
@@ -42,58 +38,49 @@ class PredicateSearch extends Component {
    componentWillUnmount() {
       console.log('Component WILL UNMOUNT!')
    }
-   search(e){
-     var str = this.state.keywords;
-     var arr = str.split(' ');
+   confirm(){
      var opts = {
-       url: global.apiUrl + 'knowledge/search-predicate',
+       url: global.apiUrl + 'knowledge/knowledge-group',
        type: 'post',
        success: (data) => {
-         var res = [];
-         data.forEach((item) => {
-           res.push(item.predicate);
-         })
-         this.setState({
-           searchResults: res
-         });
+         this.props.history.push('/knowledge-group/'+data._id);
        },
-       data: JSON.stringify(arr)
+       data: JSON.stringify({
+         "name": this.state.name,
+        	"is_private":false,
+        	"tags": [
+        	],
+          "description": this.state.description
+       })
      }
      global.simpleAjax(opts);
    }
   render() {
-    var results = [];
-    this.state.searchResults.forEach((item)=>{
-      results.push(
-        <li class="list-group-item pointer" onClick={() => {this.props.onSelectItem(item)}}>
-          <Predicate predicate={item} mode="READ-FOL" />
-        </li>
-      )
-    });
     return (
       <div className="col col-lg-12">
-        <table class="table">
-          <tr>
-          <td>
+        <h1>Create knowledge group</h1>
+        <div class="form-group ">
+          <label class="control-label " for="name">
+           Name
+          </label>
           <input
               className="form-control"
-              placeholder="Predicates search"
-              name="keywords"
+              name="name"
               type="text"
-              value={this.state.keywords}
               onChange={this.handleChange.bind(this)}
           />
-          </td>
-          <td>
-          <i class="fa fa-search pointer" onClick={this.search.bind(this)}></i>
-          </td>
-          </tr>
-        </table>
-        <div className="col col-lg-12">
-          <ul class="list-group">
-            {results}
-          </ul>
-        </div>
+         </div>
+         <div class="form-group ">
+           <label class="control-label " for="name">
+            Description
+           </label>
+           <textarea class="form-control" cols="40" id="message" name="description" rows="10" onChange={this.handleChange.bind(this)}></textarea>
+          </div>
+          <div className="col col-lg-12 text-center">
+            <button class="btn btn-primary" onClick={this.confirm.bind(this)}>Create</button>
+          </div>
+
+
         <div className="col col-lg-12">
         </div>
       </div>
@@ -102,4 +89,4 @@ class PredicateSearch extends Component {
   }
 }
 
-export default PredicateSearch;
+export default withRouter(CreateKnowledgeGroup);

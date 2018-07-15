@@ -6,12 +6,11 @@ import { withRouter } from "react-router-dom";
 
 import Predicate from './Predicate';
 
-class PredicateSearch extends Component {
+class SearchWithList extends Component {
   constructor(props) {
       super(props);
 
       this.state = {
-         stateField1: "stateField1 value",
          keywords: '',
          searchResults: []
       }
@@ -44,14 +43,14 @@ class PredicateSearch extends Component {
    }
    search(e){
      var str = this.state.keywords;
-     var arr = str.split(' ');
+     var arr = str.split(this.props.delimiter);
      var opts = {
-       url: global.apiUrl + 'knowledge/search-predicate',
-       type: 'post',
+       url: global.apiUrl + this.props.url,
+       type: this.props.method,
        success: (data) => {
          var res = [];
          data.forEach((item) => {
-           res.push(item.predicate);
+           res.push(item);
          })
          this.setState({
            searchResults: res
@@ -62,14 +61,21 @@ class PredicateSearch extends Component {
      global.simpleAjax(opts);
    }
   render() {
-    var results = [];
-    this.state.searchResults.forEach((item)=>{
-      results.push(
-        <li class="list-group-item pointer" onClick={() => {this.props.onSelectItem(item)}}>
-          <Predicate predicate={item} mode="READ-FOL" />
-        </li>
-      )
-    });
+    var results;
+    if(this.state.loading){
+        results = (
+          <div className="col col-lg-12">
+            {global.loading}
+          </div>
+        )
+    }
+    else{
+      if(this.state.searchResults){
+        results = (
+          <SelectableList items={this.state.searchResults} onSelectItem={this.props.onSelectItem} getItemView={this.props.getItemView} />
+        )
+      }
+    }
     return (
       <div className="col col-lg-12">
         <table class="table">
@@ -77,7 +83,7 @@ class PredicateSearch extends Component {
           <td>
           <input
               className="form-control"
-              placeholder="Predicates search"
+              placeholder="keywords"
               name="keywords"
               type="text"
               value={this.state.keywords}
@@ -89,17 +95,11 @@ class PredicateSearch extends Component {
           </td>
           </tr>
         </table>
-        <div className="col col-lg-12">
-          <ul class="list-group">
-            {results}
-          </ul>
-        </div>
-        <div className="col col-lg-12">
-        </div>
+        {results}
       </div>
 
     );
   }
 }
 
-export default PredicateSearch;
+export default SearchWithList;

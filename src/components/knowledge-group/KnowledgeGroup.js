@@ -51,7 +51,7 @@ class KnowledgeGroup extends Component {
     var kg = this.state.knowledgeGroup;
     if(kg){
       return (
-        <div className="col col-lg-12">
+        <div className="col col-lg-12 text-center">
           <h1>Knowledge group</h1>
           <div className="card">
             <div class="card-body">

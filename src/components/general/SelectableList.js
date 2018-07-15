@@ -4,13 +4,11 @@ import $ from 'jquery';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { withRouter } from "react-router-dom";
 
-class Template extends Component {
+class SelectableList extends Component {
   constructor(props) {
       super(props);
 
-      this.state = {
-         stateField1: "stateField1 value"
-      }
+      this.state = {}
    }
 
    handleChange(e){
@@ -38,45 +36,26 @@ class Template extends Component {
    componentWillUnmount() {
       console.log('Component WILL UNMOUNT!')
    }
-   templateAjax(){
-     var opts = {
-       url: global.apiUrl + 'knowledge/knowledge-group',
-       type: 'post',
-       success: (data) => {
-         this.setState({
-           knowledgeGroup: data
-         });
-       },
-       data: JSON.stringify({
-         "name": this.state.name,
-        	"is_private":false,
-        	"tags": [
-        	],
-          "description": this.state.description
-       })
-     }
-     global.simpleAjax(opts);
-   }
+
   render() {
+    var itemViews = [];
+    console.log('SelectableList his.props.items',this.props.items);
+    this.props.items.forEach((item)=>{
+      itemViews.push(
+        <li class="list-group-item pointer" onClick={() => {this.props.onSelectItem(item)}}>
+          {this.props.getItemView(item)}
+        </li>
+      )
+    });
     return (
       <div className="col col-lg-12">
-        <h1>Template</h1>
-        <p>{this.state.stateField1}</p>
-        <p>{this.props.propsField1}</p>
-        <input
-            className="form-control"
-            placeholder="Username"
-            name="username"
-            type="text"
-            onChange={this.handleChange.bind(this)}
-        />
-
-        <div className="col col-lg-12">
-        </div>
+        <ul class="list-group">
+          {itemViews}
+        </ul>
       </div>
 
     );
   }
 }
 
-export default withRouter(Template);
+export default SelectableList;

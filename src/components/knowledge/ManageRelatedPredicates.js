@@ -140,7 +140,7 @@ class ManageRelatedPredicates extends Component {
      });
      console.log('confirmRelatedPredicates this.state.relatedPredicatesList',this.state.relatedPredicatesList);
      console.log('confirmRelatedPredicates relatedPreds',relatedPreds);
-     localStorage.setItem('predicatesPacksPool',relatedPreds);
+     localStorage.setItem('predicatesPacksPool',JSON.stringify(relatedPreds));
    }
 
   render() {
