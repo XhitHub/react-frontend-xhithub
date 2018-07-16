@@ -6,6 +6,7 @@ import config from 'react-global-configuration';
 import ReactTable from "react-table";
 import 'react-table/react-table.css';
 import $ from 'jquery';
+import SearchWithList from "../general/SearchWithList";
 
 // var apiUrl = config.get('apiUrl');
 
@@ -85,6 +86,19 @@ class KnowledgeGroups extends Component {
         <h1>Knowledge groups</h1>
         <div className="row">
           <div className="col col-lg-9">
+            <SearchWithList
+              delimiter={' '}
+              url='knowledge/get-knowledge-group-by-keywords'
+              method="post"
+              onSelectItem={()=>{}}
+              getItemView={
+                (item)=>{
+                  return (
+                    <Link to={'/knowledge-group/'+item._id}>{item.name}</Link>
+                  )
+                }
+              }
+            />
           </div>
           <div className="col col-lg-3">
             <Link to={'/create-knowledge-group'}>Create knowledge group</Link>

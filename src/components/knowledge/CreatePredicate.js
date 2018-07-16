@@ -5,6 +5,8 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { withRouter } from "react-router-dom";
 import Binder from 'react-binding';
 
+import SearchWithList from "../general/SearchWithList";
+import KnowledgeGroupPicker from "../knowledge-group/KnowledgeGroupPicker";
 import Predicate from './Predicate';
 var Combinatorics = require('js-combinatorics');
 
@@ -71,6 +73,7 @@ class CreatePredicate extends Component {
       console.log('Component WILL UNMOUNT!')
    }
 
+
    updateInfo(e){
      var info = this.state.predicatePack.info;
      info[e.target.name] = e.target.value;
@@ -128,6 +131,17 @@ class CreatePredicate extends Component {
      });
    }
 
+   updateKnowledgeGroups(groups){
+     var arr = [];
+     groups.forEach(
+       (g)=>{
+         arr.push(g._id)
+       }
+     )
+     this.state.predicatePack.info.knowledgeGroups = arr;
+     this.setState({})
+   }
+
    generateAltFormFinalInfo(){
      var allSynonymsDict = {}
      var allSynonymsList = []
@@ -166,6 +180,12 @@ class CreatePredicate extends Component {
        allSynonymsDict: this.state.allSynonymsDict,
        allSynonymsList: this.state.allSynonymsList
      }
+     // prepare search string
+     var searchString = predPack.predicate.text;
+     predPack.predicate.arguments.forEach((arg) => {
+       searchString += arg;
+     })
+     predPack.info.searchString = searchString;
      var opts = {
        url: global.apiUrl + 'knowledge/predicate/',
        type: 'post',
@@ -288,6 +308,12 @@ class CreatePredicate extends Component {
                  </label>
                  <input class="form-control" id="name" name="name" type="text" onChange={this.updateTerms.bind(this)}/>
               </div>
+
+              
+
+
+
+
 
 
            </div>

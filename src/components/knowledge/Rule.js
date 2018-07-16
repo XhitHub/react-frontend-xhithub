@@ -49,7 +49,7 @@ class Rule extends Component {
             LHS
             </div>
             <div className="card-body">
-              <Formula formula={rule.lhs} onSelectItem={this.props.onSelectItem}/>
+              <Formula formula={rule.lhs} onSelectItem={this.props.onSelectItem} mode={this.props.mode} onVarChange={this.props.onVarChange}/>
             </div>
           </div>
         </div>
@@ -66,7 +66,7 @@ class Rule extends Component {
             RHS
           </div>
           <div className="card-body">
-            <Formula formula={rule.rhs} onSelectItem={this.props.onSelectItem} />
+            <Formula formula={rule.rhs} onSelectItem={this.props.onSelectItem} mode={this.props.mode} onVarChange={this.props.onVarChange}/>
           </div>
         </div>
         </div>

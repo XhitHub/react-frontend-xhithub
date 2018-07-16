@@ -75,7 +75,25 @@ class Predicate extends Component {
       args = args.substring(2)
       var raw = sent + "("+args+")";
       content = (
-        <span>{raw}</span>
+        <span class="predicate-read-fol">{raw}</span>
+      )
+    }
+
+    if(this.state.mode == 'READ-FOL-VAR'){
+      var sent = p.text.replace(' ', '_');
+      var args = [];
+      p.arguments.forEach((arg) => {
+        args.push(
+          <span><input type="text" name={arg} placeholder={arg} onChange={(e)=>{this.props.onVarChange(e,this.props.predicate)}}/>, </span>
+        )
+      });
+      var raw = sent + "("+args+")";
+      content = (
+        <div>
+          <span class="predicate-read-fol">{sent}(</span>
+          {args}
+          <span>)</span>
+        </div>
       )
     }
 

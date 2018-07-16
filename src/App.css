@@ -43,3 +43,7 @@ a:hover{
 .App.container{
   max-width: 1200px;
 }
+
+.text-form{
+  height: 300px;
+}

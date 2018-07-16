@@ -3,8 +3,8 @@ import './style.css';
 import $ from 'jquery';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { withRouter } from "react-router-dom";
+import SelectableList from './SelectableList';
 
-import Predicate from './Predicate';
 
 class SearchWithList extends Component {
   constructor(props) {

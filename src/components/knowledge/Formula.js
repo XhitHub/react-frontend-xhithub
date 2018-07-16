@@ -116,7 +116,7 @@ class Formula extends Component {
        var className = "col col-lg-12" +' '+ isSelected;
        view = (
          <div className={className} onClick={()=>{this.selectItem(formula)}}>
-           <Predicate predicate={formula} mode="READ-FOL" />
+           <Predicate predicate={formula} mode={this.props.mode} onVarChange={this.props.onVarChange}/>
          </div>
        )
      }

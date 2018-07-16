@@ -8,6 +8,7 @@ import Rule from "./Rule";
 import Predicate from './Predicate';
 import PredicateSearch from "./PredicateSearch";
 import SelectableList from "../general/SelectableList";
+import KnowledgeGroupPicker from "../knowledge-group/KnowledgeGroupPicker";
 
 
 class CreateRule extends Component {
@@ -22,7 +23,8 @@ class CreateRule extends Component {
            rhs:{
 
            }
-         }
+         },
+         textForm:''
       }
       this.addElement = this.addElement.bind(this);
    }
@@ -121,68 +123,120 @@ class CreateRule extends Component {
      this.setState({});
      console.log('this.state.rule',this.state.rule);
    }
+   updateKnowledgeGroups(groups){
+     var arr = [];
+     groups.forEach(
+       (g)=>{
+         arr.push(g._id)
+       }
+     )
+     this.state.knowledgeGroups = arr;
+     this.setState({})
+   }
+   onVarChange(e,pred){
+     if(!pred.variables){
+       pred.variables = {}
+     }
+     pred.variables[e.target.name] = e.target.value;
+     this.setState({})
+     console.log('this.state.rule',this.state.rule);
+   }
+   submit(){
+
+   }
+
   render() {
     var rule = this.state.rule;
     var memoryPredicatePacks = JSON.parse(localStorage.getItem('predicatesPacksPool'));
     return (
       <div className="col col-lg-12">
-        <h1>Create edit rule</h1>
-        <div class="row">
-
-        <div className="col col-md-4">
-          <div className="card" id="rule-control-panel">
-            <div className="card-header">
-            Control panel
+        <h1>Create / edit rule</h1>
+          <ul class="nav nav-tabs">
+            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#textForm">Step 1: Text form</a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#logicForm">Step 2: Logical form</a></li>
+          </ul>
+          <div class="container-fluid">
+          <div class="tab-content">
+            <div role="tabpanel" id="textForm" class="tab-pane fade show active">
+              <div class="form-group ">
+               <label class="control-label " for="message">
+                Describe the rule in text:
+               </label>
+               <textarea class="form-control text-form" cols="40" id="message" name="textForm" rows="20" onChange={this.handleChange.bind(this)}></textarea>
+              </div>
             </div>
-            <div className="card-body">
-              <p>Logical connectives</p>
-              <div class="btn-group" role="group" aria-label="Add elements">
-                <button class="btn btn-default" onClick={()=>{this.addElement({and: []})}}>AND</button>
-                <button class="btn btn-default" onClick={()=>{this.addElement({or: []})}}>OR</button>
-                <button class="btn btn-default" onClick={()=>{this.addElement({not: {}})}}>NOT</button>
-              </div>
-              <hr />
-              <p>Predicates</p>
-              <ul class="nav nav-tabs">
-                <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#memory">Memory</a></li>
-                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#search">Search</a></li>
-              </ul>
-              <div class="container-fluid">
-              <div class="tab-content">
-                <div role="tabpanel" id="memory" class="tab-pane fade in active">
-                  <SelectableList
-                    items={memoryPredicatePacks}
-                    getItemView={
-                      function(item){
-                        return (
-                          <Predicate predicate={item.predicate} mode="READ-FOL" />
-                        );
-                      }
-                    }
-                    onSelectItem={
-                      (item)=>{
-                        this.addElement(item.predicate);
-                      }
-                    }
-                  />
+            <div role="tabpanel" id="logicForm" class="tab-pane fade">
+              <div class="row">
+              <div className="col col-md-4">
+                <div className="card" id="rule-control-panel">
+                  <div className="card-header">
+                  Control panel
+                  </div>
+                  <div className="card-body">
+                    <p>Logical connectives</p>
+                    <div class="btn-group" role="group" aria-label="Add elements">
+                      <button class="btn btn-default" onClick={()=>{this.addElement({and: []})}}>AND</button>
+                      <button class="btn btn-default" onClick={()=>{this.addElement({or: []})}}>OR</button>
+                      <button class="btn btn-default" onClick={()=>{this.addElement({not: {}})}}>NOT</button>
+                    </div>
+                    <hr />
+                    <p>Predicates</p>
+                    <ul class="nav nav-tabs">
+                      <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#memory">Memory</a></li>
+                      <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#search">Search</a></li>
+                    </ul>
+                    <div class="container-fluid">
+                    <div class="tab-content">
+                      <div role="tabpanel" id="memory" class="tab-pane fade show active">
+                        <SelectableList
+                          items={memoryPredicatePacks}
+                          getItemView={
+                            function(item){
+                              return (
+                                <Predicate predicate={item.predicate} mode="READ-FOL" />
+                              );
+                            }
+                          }
+                          onSelectItem={
+                            (item)=>{
+                              this.addElement(item.predicate);
+                            }
+                          }
+                        />
+                      </div>
+                      <div role="tabpanel" id="search" class="tab-pane fade">
+                        <PredicateSearch onSelectItem={this.addElement} />
+                      </div>
+                    </div>
+                    </div>
+                    <hr />
+                    <div className="col col-lg-12 text-center">
+                      <button class="btn btn-danger" onClick={this.removeElement.bind(this)}>Remove</button>
+                    </div>
+                  </div>
                 </div>
-                <div role="tabpanel" id="search" class="tab-pane fade">
-                  <PredicateSearch onSelectItem={this.addElement} />
-                </div>
               </div>
+              <div className="col col-md-8">
+                <Rule rule={rule} onSelectItem={this.onSelectItem.bind(this) } mode="READ-FOL-VAR"  onVarChange={this.onVarChange.bind(this)}/>
               </div>
-              <hr />
-              <div className="col col-lg-12 text-center">
-                <button class="btn btn-danger" onClick={this.removeElement.bind(this)}>Remove</button>
+
               </div>
             </div>
           </div>
-        </div>
-        <div className="col col-md-8">
-          <Rule rule={rule} onSelectItem={this.onSelectItem.bind(this)} />
-        </div>
 
-        </div>
+      </div>
+      <hr />
+      <div className="col offset-lg-0 col-lg-12">
+      <div class="form-group ">
+        <label class="control-label " for="name">
+         Knowledge groups this rule belongs to:
+        </label>
+        <KnowledgeGroupPicker onPickedGroupsChange={this.updateKnowledgeGroups.bind(this)} />
+      </div>
+      </div>
+      <div className="col col-lg-12 text-center">
+        <button class="btn btn-primary" onClick={this.submit.bind(this)}>Create rule</button>
+      </div>
       </div>
 
     );

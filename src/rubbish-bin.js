@@ -197,6 +197,7 @@ if(selectItem){
 
 
 
+
 and:[
   {
     text: 'goes to',
@@ -230,3 +231,14 @@ and:[
   }
 
 ]
+
+
+
+
+
+<div class="form-group ">
+  <label class="control-label " for="name">
+   Knowledge groups
+  </label>
+  <KnowledgeGroupPicker onPickedGroupsChange={this.updateKnowledgeGroups.bind(this)} />
+</div>

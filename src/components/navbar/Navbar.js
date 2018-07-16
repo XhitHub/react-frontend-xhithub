@@ -143,6 +143,16 @@ class Navbar extends Component {
               </a>
            </li>
            <li className="nav-item">
+              <a className="nav-link">
+                 <Link to={'/predicates'}>Predicates</Link>
+              </a>
+           </li>
+           <li className="nav-item">
+              <a className="nav-link">
+                 <Link to={'/create-rule'}>Declare rule</Link>
+              </a>
+           </li>
+           <li className="nav-item">
               <a className="nav-link disabled" href="#">Disabled</a>
            </li>
         </ul>

@@ -8,7 +8,8 @@ import './App.css';
 import Template from './components/template/Template';
 import Navbar from './components/navbar/Navbar';
 import Login from './components/login/Login';
-import KnowledgeGroups from './components/knowledge-groups/KnowledgeGroups';
+import KnowledgeGroups from './components/pages/KnowledgeGroups';
+import Predicates from './components/pages/Predicates';
 import KnowledgeGroup from './components/knowledge-group/KnowledgeGroup';
 import CreateKnowledgeGroup from './components/knowledge-group/CreateKnowledgeGroup';
 import CreatePredicate from './components/knowledge/CreatePredicate';
@@ -70,6 +71,14 @@ global.simpleAjax = function(optionsExtra){
 }
 global.loading = (<div><h4>Loading</h4></div>);
 
+console.log('app.js predicatesPacksPool',localStorage.getItem('predicatesPacksPool'))
+// TODO: remove true
+if(false || !localStorage.getItem('predicatesPacksPool')){
+  console.log('app.js predicatesPacksPool',localStorage.getItem('predicatesPacksPool'))
+  localStorage.setItem('predicatesPacksPool',JSON.stringify([]))
+  console.log('app.js predicatesPacksPool',localStorage.getItem('predicatesPacksPool'))
+}
+
 class App extends Component {
   render() {
     return (
@@ -82,11 +91,14 @@ class App extends Component {
              <Route exact path='/' component={Template} />
              <Route exact path='/login' component={Login} />
              <Route exact path='/knowledge-groups' component={KnowledgeGroups} />
+             <Route exact path='/predicates' component={Predicates} />
              <Route path='/knowledge-group/:id' component={KnowledgeGroup} />
              <Route path='/create-knowledge-group' component={CreateKnowledgeGroup} />
              <Route path='/create-predicate/:kgid' component={CreatePredicate} />
+             <Route path='/create-predicate/' component={CreatePredicate} />
              <Route path='/manage-related-predicates/:id' component={ManageRelatedPredicates} />
              <Route path='/create-rule/:kgid' component={CreateRule} />
+             <Route path='/create-rule/' component={CreateRule} />
            </Switch>
         </div>
         </div>
@@ -95,5 +107,7 @@ class App extends Component {
     );
   }
 }
+
+
 
 export default App;
