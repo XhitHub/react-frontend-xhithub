@@ -41,9 +41,13 @@ a:hover{
 }
 
 .App.container{
-  max-width: 1200px;
+  max-width: 1400px;
 }
 
 .text-form{
   height: 300px;
+}
+
+#global-loading{
+  height: 500px;
 }

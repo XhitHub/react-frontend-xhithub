@@ -107,7 +107,7 @@ class Facts extends Component {
   render() {
     const columns = [
       {
-        Header: 'Rule',
+        Header: 'Fact',
         accessor: 'factPack', // String-based value accessors!
         Cell: props =>
           <Link to={'/fact/'+props.value._id}>

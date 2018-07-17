@@ -13,7 +13,8 @@ class KnowledgeGroup extends Component {
 
       this.state = {
          knowledgeGroup: undefined,
-         rules: []
+         rules: [],
+         facts: []
       }
    }
 
@@ -52,6 +53,21 @@ class KnowledgeGroup extends Component {
       }
       global.simpleAjax(opts2);
 
+      var opts3 = {
+        url: global.apiUrl + 'knowledge/get-facts-by-knowledge-group/'+kgid,
+        type: 'get',
+        success: (data) => {
+          var wrappedData = [];
+          data.forEach((item) => {
+            wrappedData.push({factPack: item});
+          })
+          this.setState({
+            facts: wrappedData
+          });
+        }
+      }
+      global.simpleAjax(opts3);
+
        // var opts2 = {
        //   url: global.apiUrl + 'knowledge/get-predicates-by-knowledge-group/'+kgid,
        //   type: 'get',
@@ -80,7 +96,7 @@ class KnowledgeGroup extends Component {
    }
   render() {
     var kg = this.state.knowledgeGroup;
-    const columns = [
+    const columnsRule = [
       {
         Header: 'Rule',
         accessor: 'rulePack', // String-based value accessors!
@@ -95,6 +111,22 @@ class KnowledgeGroup extends Component {
         Cell: props => <span>{props.value.info.textForm}</span>
       }
     ];
+    const columnsFact = [
+      {
+        Header: 'Fact',
+        accessor: 'factPack', // String-based value accessors!
+        Cell: props =>
+          <Link to={'/fact/'+props.value._id}>
+            <pre>{global.formulaToString(props.value.fact)}</pre>
+          </Link>
+      },
+      {
+        Header: 'Text form',
+        accessor: 'factPack', // String-based value accessors!
+        Cell: props => <span>{props.value.info.textForm}</span>
+      }
+    ];
+
 
     if(kg){
       return (
@@ -112,18 +144,39 @@ class KnowledgeGroup extends Component {
             <div className="card-header">
               <div className="row">
                 <div className="offset-md-3 col-md-6">
+                  <h4 class="pull-left">Facts</h4>
+                </div>
+                <div className="col-md-3 pull-right">
+                  <Link to={'/create-fact/'}>Create</Link>
+                </div>
+              </div>
+            </div>
+            <div className="card-body">
+            <ReactTable
+              data={this.state.facts}
+              columns={columnsFact}
+              defaultPageSize="10"
+              pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
+            />
+            </div>
+          </div>
+
+          <div className="card">
+            <div className="card-header">
+              <div className="row">
+                <div className="offset-md-3 col-md-6">
                   <h4 class="pull-left">Rules</h4>
                 </div>
                 <div className="col-md-3 pull-right">
-                  <Link to={'/create-rule/'+kg._id}>Create</Link>
+                  <Link to={'/create-rule/'}>Create</Link>
                 </div>
               </div>
             </div>
             <div className="card-body">
             <ReactTable
               data={this.state.rules}
-              columns={columns}
-              defaultPageSize="15"
+              columns={columnsRule}
+              defaultPageSize="10"
               pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
             />
             </div>

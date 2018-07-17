@@ -12,6 +12,9 @@ import KnowledgeGroups from './components/pages/KnowledgeGroups';
 import Predicates from './components/pages/Predicates';
 import Rules from './components/pages/Rules';
 import Facts from './components/pages/Facts';
+import PredicateDetails from './components/pages/PredicateDetails';
+// import Home from './components/pages/Home';
+// import Home from './components/pages/Home';
 import Home from './components/pages/Home';
 import KnowledgeGroup from './components/knowledge-group/KnowledgeGroup';
 import CreateKnowledgeGroup from './components/knowledge-group/CreateKnowledgeGroup';
@@ -73,14 +76,18 @@ global.simpleAjax = function(optionsExtra){
   }
   $.ajax(options);
 }
-global.loading = (<div><h4>Loading</h4></div>);
+global.loading = (
+  <div id="global-loading" class="text-center">
+    <h4>Loading</h4>
+  </div>
+);
 
-console.log('app.js predicatesPacksPool',localStorage.getItem('predicatesPacksPool'))
 // TODO: remove true
 if(false || !localStorage.getItem('predicatesPacksPool')){
-  console.log('app.js predicatesPacksPool',localStorage.getItem('predicatesPacksPool'))
   localStorage.setItem('predicatesPacksPool',JSON.stringify([]))
-  console.log('app.js predicatesPacksPool',localStorage.getItem('predicatesPacksPool'))
+}
+if(false || !localStorage.getItem('relatedPredicatePacks')){
+  localStorage.setItem('relatedPredicatePacks',JSON.stringify([]))
 }
 
 class App extends Component {
@@ -101,11 +108,12 @@ class App extends Component {
              <Route path='/create-predicate/:kgid' component={CreatePredicate} />
              <Route path='/create-predicate/' component={CreatePredicate} />
              <Route path='/manage-related-predicates/:id' component={ManageRelatedPredicates} />
-             <Route path='/create-rule/:kgid' component={CreateRule} />
+             <Route path='/create-rule/:mode' component={CreateRule} />
              <Route path='/create-rule/' component={CreateRule} />
              <Route path='/create-fact/' component={CreateFact} />
              <Route path='/rules/' component={Rules} />
              <Route path='/facts/' component={Facts} />
+             <Route path='/predicate/:id' component={PredicateDetails} />
            </Switch>
         </div>
         </div>

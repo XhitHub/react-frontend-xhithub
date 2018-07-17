@@ -60,27 +60,71 @@ class PredicatePicker extends Component {
         Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
       }
     ];
+    var navTabs;
+    var tabPanels;
+    if(this.props.mode == 'connect-related-predicates'){
+      var relatedPredicatePacks = JSON.parse(localStorage.getItem('relatedPredicatePacks'));
+      navTabs = (
+        <div className="col col-lg-12">
+          <ul class="nav nav-tabs">
+            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#related">Related</a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#memory">Memory</a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#search">Search</a></li>
+          </ul>
+          <div class="container-fluid">
+          <div class="tab-content">
+            <div role="tabpanel" id="related" class="tab-pane fade show active">
+              <ReactTable
+                data={relatedPredicatePacks}
+                columns={columns}
+                defaultPageSize="10"
+                pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
+              />
+            </div>
+            <div role="tabpanel" id="memory" class="tab-pane fade">
+              <ReactTable
+                data={memoryPredicatePacks}
+                columns={columns}
+                defaultPageSize="10"
+                pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
+              />
+            </div>
+            <div role="tabpanel" id="search" class="tab-pane fade">
+              <PredicateSearch onSelectItem={this.props.onSelectItem} />
+            </div>
+          </div>
+          </div>
+        </div>
+      )
+    }
+    else{
+      navTabs = (
+        <div className="col col-lg-12">
+          <ul class="nav nav-tabs">
+            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#memory">Memory</a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#search">Search</a></li>
+          </ul>
+          <div class="container-fluid">
+          <div class="tab-content">
+            <div role="tabpanel" id="memory" class="tab-pane fade show active">
+              <ReactTable
+                data={memoryPredicatePacks}
+                columns={columns}
+                defaultPageSize="10"
+                pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
+              />
+            </div>
+            <div role="tabpanel" id="search" class="tab-pane fade">
+              <PredicateSearch onSelectItem={this.props.onSelectItem} />
+            </div>
+          </div>
+          </div>
+        </div>
+      )
+    }
     return (
-      <div className="col col-lg-12">
-        <ul class="nav nav-tabs">
-          <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#memory">Memory</a></li>
-          <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#search">Search</a></li>
-        </ul>
-        <div class="container-fluid">
-        <div class="tab-content">
-          <div role="tabpanel" id="memory" class="tab-pane fade show active">
-            <ReactTable
-              data={memoryPredicatePacks}
-              columns={columns}
-              defaultPageSize="10"
-              pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
-            />
-          </div>
-          <div role="tabpanel" id="search" class="tab-pane fade">
-            <PredicateSearch onSelectItem={this.props.onSelectItem} />
-          </div>
-        </div>
-        </div>
+      <div className="">
+        {navTabs}
       </div>
 
     );

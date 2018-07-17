@@ -146,6 +146,7 @@ class CreateRule extends Component {
 
    }
    submit(){
+     var mode = this.props.match.params.mode;
      var rulePack = {
        rule: this.state.rule,
        info:{
@@ -159,7 +160,24 @@ class CreateRule extends Component {
        type: 'post',
        success: (data) => {
          alert('Rule is created successfully.');
-         this.props.history.push('/rule/'+data._id);
+         if(mode == 'connect-related-predicates'){
+           this.setState(
+             {
+                rule: {
+                  lhs:{
+
+                  },
+                  rhs:{
+
+                  }
+                },
+                textForm:''
+             }
+           )
+         }
+         else{
+           this.props.history.push('/rule/'+data._id);
+         }
        },
        data: JSON.stringify(rulePack)
      }
@@ -167,11 +185,19 @@ class CreateRule extends Component {
    }
 
   render() {
+    var mode = this.props.match.params.mode;
     var rule = this.state.rule;
     var memoryPredicatePacks = JSON.parse(localStorage.getItem('predicatesPacksPool'));
+    var title;
+    if(mode == 'connect-related-predicates'){
+      title = 'Create conversion rules for related predicates'
+    }
+    else{
+      title = 'Create / edit rule'
+    }
     return (
       <div className="col col-lg-12">
-        <h1>Create / edit rule</h1>
+        <h1>{title}</h1>
           <ul class="nav nav-tabs">
             <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#textForm">Step 1: Text form</a></li>
             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#logicForm">Step 2: Logical form</a></li>
@@ -206,7 +232,7 @@ class CreateRule extends Component {
                     </div>
                     <hr />
                     <p>Predicates</p>
-                    <PredicatePicker onSelectItem={this.addElement.bind(this)} />
+                    <PredicatePicker mode={mode} onSelectItem={this.addElement.bind(this)} />
                     <hr />
                     <div className="col col-lg-12 text-center">
                       <button class="btn btn-danger" onClick={this.removeElement.bind(this)}>Remove element</button>

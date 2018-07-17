@@ -67,7 +67,7 @@ class Predicate extends Component {
     }
 
     if(this.state.mode == 'READ-FOL'){
-      var sent = p.text.replace(' ', '_');
+      var sent = p.text.replace(/\s/g, '_');
       var args = "";
       p.arguments.forEach((arg) => {
         args += ", " + arg
@@ -80,7 +80,7 @@ class Predicate extends Component {
     }
 
     if(this.state.mode == 'EDIT-FOL-VAR'){
-      var sent = p.text.replace(' ', '_');
+      var sent = p.text.replace(/\s/g, '_');
       var args = [];
       p.arguments.forEach((arg) => {
         args.push(
@@ -98,7 +98,7 @@ class Predicate extends Component {
     }
 
     if(this.state.mode == 'READ-FOL-VAR'){
-      var sent = p.text.replace(' ', '_');
+      var sent = p.text.replace(/\s/g, '_');
       var args = '';
       p.arguments.forEach((arg) => {
         var argVar;
@@ -132,7 +132,7 @@ Predicate.defaultProps = {
 };
 
 global.predicateToString = function(p){
-  var sent = p.text.replace(' ', '_');
+  var sent = p.text.replace(/\s/g, '_');
   var args = '';
   if(p.arguments){
     var arr = p.arguments;
