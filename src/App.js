@@ -11,11 +11,13 @@ import Login from './components/login/Login';
 import KnowledgeGroups from './components/pages/KnowledgeGroups';
 import Predicates from './components/pages/Predicates';
 import Rules from './components/pages/Rules';
+import Facts from './components/pages/Facts';
 import Home from './components/pages/Home';
 import KnowledgeGroup from './components/knowledge-group/KnowledgeGroup';
 import CreateKnowledgeGroup from './components/knowledge-group/CreateKnowledgeGroup';
 import CreatePredicate from './components/knowledge/CreatePredicate';
 import CreateRule from './components/knowledge/CreateRule';
+import CreateFact from './components/knowledge/CreateFact';
 import ManageRelatedPredicates from './components/knowledge/ManageRelatedPredicates';
 
 config.set({ apiUrl: 'http://localhost:3000/' });
@@ -101,7 +103,9 @@ class App extends Component {
              <Route path='/manage-related-predicates/:id' component={ManageRelatedPredicates} />
              <Route path='/create-rule/:kgid' component={CreateRule} />
              <Route path='/create-rule/' component={CreateRule} />
+             <Route path='/create-fact/' component={CreateFact} />
              <Route path='/rules/' component={Rules} />
+             <Route path='/facts/' component={Facts} />
            </Switch>
         </div>
         </div>

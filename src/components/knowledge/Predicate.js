@@ -134,17 +134,23 @@ Predicate.defaultProps = {
 global.predicateToString = function(p){
   var sent = p.text.replace(' ', '_');
   var args = '';
-  p.arguments.forEach((arg) => {
-    var argVar;
-    if(p.variables[arg]){
-      argVar = p.variables[arg]
-    }
-    else{
-      argVar = arg
-    }
-    args += ", " + argVar
-  });
-  args = args.substring(2)
+  if(p.arguments){
+    var arr = p.arguments;
+    arr.forEach((arg) => {
+      var argVar;
+      if(p.variables && p.variables[arg]){
+        argVar = p.variables[arg]
+      }
+      else if(p.parameters && p.parameters[arg]){
+        argVar = p.parameters[arg]
+      }
+      else{
+        argVar = arg
+      }
+      args += ", " + argVar
+    });
+    args = args.substring(2)
+  }
   var raw = sent + "("+args+")";
   return raw;
 }
