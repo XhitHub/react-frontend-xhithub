@@ -13,8 +13,8 @@ import Predicates from './components/pages/Predicates';
 import Rules from './components/pages/Rules';
 import Facts from './components/pages/Facts';
 import PredicateDetails from './components/pages/PredicateDetails';
-// import Home from './components/pages/Home';
-// import Home from './components/pages/Home';
+import RuleDetails from './components/pages/RuleDetails';
+import FactDetails from './components/pages/FactDetails';
 import Home from './components/pages/Home';
 import KnowledgeGroup from './components/knowledge-group/KnowledgeGroup';
 import CreateKnowledgeGroup from './components/knowledge-group/CreateKnowledgeGroup';
@@ -76,6 +76,14 @@ global.simpleAjax = function(optionsExtra){
   }
   $.ajax(options);
 }
+global.getUserID = function(){
+  if(global.user){
+    return global.user._id;
+  }
+  else{
+    return false;
+  }
+}
 global.loading = (
   <div id="global-loading" class="text-center">
     <h4>Loading</h4>
@@ -114,6 +122,8 @@ class App extends Component {
              <Route path='/rules/' component={Rules} />
              <Route path='/facts/' component={Facts} />
              <Route path='/predicate/:id' component={PredicateDetails} />
+             <Route path='/fact/:id' component={FactDetails} />
+             <Route path='/rule/:id' component={RuleDetails} />
            </Switch>
         </div>
         </div>

@@ -82,7 +82,7 @@ class PredicateSearch extends Component {
       }
     ];
     return (
-      <div className="col col-lg-12">
+      <div className="">
         <table class="table">
           <tr>
           <td>

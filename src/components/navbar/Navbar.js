@@ -41,6 +41,7 @@ class Navbar extends Component {
             this.setState({
               user: data
             });
+            global.user = data;
           }
         }
         global.simpleAjax(opts);

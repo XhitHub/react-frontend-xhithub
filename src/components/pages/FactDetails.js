@@ -4,14 +4,14 @@ import $ from 'jquery';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { withRouter } from "react-router-dom";
 
-import Predicate from '../knowledge/Predicate';
+import Fact from '../knowledge/Fact';
 
-class PredicateDetails extends Component {
+class FactDetails extends Component {
   constructor(props) {
       super(props);
 
       this.state = {
-         predicatePack: undefined
+         factPack: undefined
       }
    }
 
@@ -26,11 +26,11 @@ class PredicateDetails extends Component {
       console.log('Component DID MOUNT!')
       var id = this.props.match.params.id;
       var opts = {
-        url: global.apiUrl + 'knowledge/predicate/'+id,
+        url: global.apiUrl + 'knowledge/fact/'+id,
         type: 'get',
         success: (data) => {
           this.setState({
-            predicatePack: data
+            factPack: data
           });
         }
       }
@@ -78,65 +78,37 @@ class PredicateDetails extends Component {
      // }
    }
   render() {
-    var pp = this.state.predicatePack;
+    var rp = this.state.factPack;
 
-    if(pp){
-      var synsCards = [];
-      var asd = pp.altFormInfo.allSynonymsDict;
-      for(var k in asd){
-        var synViews = [];
-        asd[k].forEach(syn=>{
-          synViews.push(
-            <li class="list-group-item">
-              {syn}
-            </li>
-          )
-        })
-        synsCards.push(
-          <div className="col col-lg-3">
-            <div className="card">
-              <div className="card-header">
-                {k}
-              </div>
-              <div className="card-body">
-              <ul class="list-group">
-                {synViews}
-              </ul>
-              </div>
-            </div>
-          </div>
+    if(rp){
 
-        )
-      }
       var controlButtons;
-      if(global.getUserID() == pp.createdBy){
+      if(global.getUserID() == rp.createdBy){
         controlButtons = (
           <div class="btn-group" role="group" aria-label="Add elements">
-            <Link to={'/manage-related-predicates/'+pp._id}><button class="btn btn-primary" >Manage related predicates</button></Link>
-            <Link to={'/create-predicate/edit/'+pp._id}><button class="btn btn-default" >Edit</button></Link>
+            <Link to={'/create-rule/edit/'+rp._id}><button class="btn btn-default" >Edit</button></Link>
             <button class="btn btn-danger" onClick={this.removePredicate.bind(this)}>Remove</button>
-          </div>
-        )
-      }
-      else{
-        controlButtons = (
-          <div class="btn-group" role="group" aria-label="Add elements">
-            <Link to={'/manage-related-predicates/'+pp._id}><button class="btn btn-primary" >Manage related predicates</button></Link>
           </div>
         )
       }
 
       return (
         <div className="">
-          <h3 class="text-center predicate-details-title"><Predicate predicate={pp.predicate} mode="READ-FOL"/></h3>
-
+          <h1 class="text-center">Fact details</h1>
           <div class="text-center">
             {controlButtons}
           </div>
+          <hr/ >
+          <h3 class="text-center">Logical form</h3>
+          <Fact fact={rp.fact} mode="READ-FOL"/>
+
           <hr />
-          <p>Selected synonyms:</p>
-          <div className="row">
-          {synsCards}
+
+          <div className="">
+          <div className="col col-lg-12">
+          <h3 class="text-center">Text form</h3>
+          <p>{rp.info.textForm}</p>
+          </div>
           </div>
         </div>
 
@@ -149,4 +121,4 @@ class PredicateDetails extends Component {
   }
 }
 
-export default withRouter(PredicateDetails);
+export default withRouter(FactDetails);
