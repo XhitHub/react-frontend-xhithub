@@ -4,20 +4,17 @@ import $ from 'jquery';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { withRouter } from "react-router-dom";
 
-
 import ReactTable from "react-table";
 import 'react-table/react-table.css';
 
 import Predicate from './Predicate';
+import PredicateSearch from "./PredicateSearch";
 
-class PredicateSearch extends Component {
+class PredicatePicker extends Component {
   constructor(props) {
       super(props);
 
       this.state = {
-         stateField1: "stateField1 value",
-         keywords: '',
-         searchResults: []
       }
    }
 
@@ -46,26 +43,8 @@ class PredicateSearch extends Component {
    componentWillUnmount() {
       console.log('Component WILL UNMOUNT!')
    }
-   search(e){
-     var str = this.state.keywords;
-     var arr = str.split(' ');
-     var opts = {
-       url: global.apiUrl + 'knowledge/search-predicate',
-       type: 'post',
-       success: (data) => {
-         var res = [];
-         data.forEach((item) => {
-           res.push(item.predicate);
-         })
-         this.setState({
-           searchResults: data
-         });
-       },
-       data: JSON.stringify(arr)
-     }
-     global.simpleAjax(opts);
-   }
   render() {
+    var memoryPredicatePacks = JSON.parse(localStorage.getItem('predicatesPacksPool'));
     const columns = [
       {
         Header: 'Predicate',
@@ -83,32 +62,24 @@ class PredicateSearch extends Component {
     ];
     return (
       <div className="col col-lg-12">
-        <table class="table">
-          <tr>
-          <td>
-          <input
-              className="form-control"
-              placeholder="Predicates search"
-              name="keywords"
-              type="text"
-              value={this.state.keywords}
-              onChange={this.handleChange.bind(this)}
-          />
-          </td>
-          <td>
-          <i class="fa fa-search pointer" onClick={this.search.bind(this)}></i>
-          </td>
-          </tr>
-        </table>
-        <div className="col col-lg-12">
-          <ReactTable
-            data={this.state.searchResults}
-            columns={columns}
-            defaultPageSize="10"
-            pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
-          />
+        <ul class="nav nav-tabs">
+          <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#memory">Memory</a></li>
+          <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#search">Search</a></li>
+        </ul>
+        <div class="container-fluid">
+        <div class="tab-content">
+          <div role="tabpanel" id="memory" class="tab-pane fade show active">
+            <ReactTable
+              data={memoryPredicatePacks}
+              columns={columns}
+              defaultPageSize="10"
+              pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
+            />
+          </div>
+          <div role="tabpanel" id="search" class="tab-pane fade">
+            <PredicateSearch onSelectItem={this.props.onSelectItem} />
+          </div>
         </div>
-        <div className="col col-lg-12">
         </div>
       </div>
 
@@ -116,4 +87,4 @@ class PredicateSearch extends Component {
   }
 }
 
-export default PredicateSearch;
+export default PredicatePicker;

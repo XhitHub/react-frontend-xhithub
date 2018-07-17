@@ -10,6 +10,8 @@ import Navbar from './components/navbar/Navbar';
 import Login from './components/login/Login';
 import KnowledgeGroups from './components/pages/KnowledgeGroups';
 import Predicates from './components/pages/Predicates';
+import Rules from './components/pages/Rules';
+import Home from './components/pages/Home';
 import KnowledgeGroup from './components/knowledge-group/KnowledgeGroup';
 import CreateKnowledgeGroup from './components/knowledge-group/CreateKnowledgeGroup';
 import CreatePredicate from './components/knowledge/CreatePredicate';
@@ -88,7 +90,7 @@ class App extends Component {
         <div className="col col-lg-12">
         <Navbar></Navbar>
            <Switch>
-             <Route exact path='/' component={Template} />
+             <Route exact path='/' component={Home} />
              <Route exact path='/login' component={Login} />
              <Route exact path='/knowledge-groups' component={KnowledgeGroups} />
              <Route exact path='/predicates' component={Predicates} />
@@ -99,6 +101,7 @@ class App extends Component {
              <Route path='/manage-related-predicates/:id' component={ManageRelatedPredicates} />
              <Route path='/create-rule/:kgid' component={CreateRule} />
              <Route path='/create-rule/' component={CreateRule} />
+             <Route path='/rules/' component={Rules} />
            </Switch>
         </div>
         </div>

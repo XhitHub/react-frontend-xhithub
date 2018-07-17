@@ -75,4 +75,14 @@ class Rule extends Component {
   }
 }
 
+Rule.defaultProps = {
+  mode: 'READ-FOL'
+};
+
+global.ruleToString = function(rule){
+  var lhs = global.formulaToString(rule.lhs);
+  var rhs = global.formulaToString(rule.rhs);
+  return (lhs + '  -->  '+rhs);
+}
+
 export default Rule;

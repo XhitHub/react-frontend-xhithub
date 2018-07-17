@@ -79,7 +79,7 @@ class Predicate extends Component {
       )
     }
 
-    if(this.state.mode == 'READ-FOL-VAR'){
+    if(this.state.mode == 'EDIT-FOL-VAR'){
       var sent = p.text.replace(' ', '_');
       var args = [];
       p.arguments.forEach((arg) => {
@@ -97,6 +97,26 @@ class Predicate extends Component {
       )
     }
 
+    if(this.state.mode == 'READ-FOL-VAR'){
+      var sent = p.text.replace(' ', '_');
+      var args = '';
+      p.arguments.forEach((arg) => {
+        var argVar;
+        if(p.variables[arg]){
+          argVar = p.variables[arg]
+        }
+        else{
+          argVar = arg
+        }
+        args += ", " + argVar
+      });
+      args = args.substring(2)
+      var raw = sent + "("+args+")";
+      content = (
+        <span class="predicate-read-fol">{raw}</span>
+      )
+    }
+
     return (
       <div className="predicate pointer">
         {content}
@@ -107,9 +127,27 @@ class Predicate extends Component {
 }
 
 Predicate.defaultProps = {
-  mode: 'READ',
+  mode: 'READ-FOL',
   readOnly: true
 };
+
+global.predicateToString = function(p){
+  var sent = p.text.replace(' ', '_');
+  var args = '';
+  p.arguments.forEach((arg) => {
+    var argVar;
+    if(p.variables[arg]){
+      argVar = p.variables[arg]
+    }
+    else{
+      argVar = arg
+    }
+    args += ", " + argVar
+  });
+  args = args.substring(2)
+  var raw = sent + "("+args+")";
+  return raw;
+}
 
 
 export default Predicate;

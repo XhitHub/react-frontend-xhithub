@@ -136,4 +136,31 @@ class Formula extends Component {
   }
 }
 
+global.formulaToString = function(formula){
+  var and = ' ^ '
+  var or = ' v '
+  var not = ' !'
+  if(formula.and){
+    var s = ''
+    formula.and.forEach(item=>{
+      s += (and + global.formulaToString(item));
+    })
+    return s.substring(and.length);
+  }
+  if(formula.or){
+    var s = ''
+    formula.or.forEach(item=>{
+      s += (or + global.formulaToString(item));
+    })
+    return s.substring(or.length);
+  }
+  if(formula.not){
+    var s = not+'('+global.formulaToString(formula.not)+')'
+    return s.substring(and.length);
+  }
+  if(formula.text){
+    return global.predicateToString(formula);
+  }
+}
+
 export default Formula;

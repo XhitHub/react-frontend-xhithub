@@ -7,6 +7,7 @@ import Formula from "./Formula";
 import Rule from "./Rule";
 import Predicate from './Predicate';
 import PredicateSearch from "./PredicateSearch";
+import PredicatePicker from "./PredicatePicker";
 import SelectableList from "../general/SelectableList";
 import KnowledgeGroupPicker from "../knowledge-group/KnowledgeGroupPicker";
 
@@ -141,8 +142,28 @@ class CreateRule extends Component {
      this.setState({})
      console.log('this.state.rule',this.state.rule);
    }
-   submit(){
+   convertToLogicalForm(){
 
+   }
+   submit(){
+     var rulePack = {
+       rule: this.state.rule,
+       info:{
+         textForm: this.state.textForm,
+         knowledgeGroups: this.state.knowledgeGroups,
+         string: global.ruleToString(this.state.rule)
+       }
+     };
+     var opts = {
+       url: global.apiUrl + 'knowledge/rule',
+       type: 'post',
+       success: (data) => {
+         alert('Rule is created successfully.');
+         this.props.history.push('/rule/'+data._id);
+       },
+       data: JSON.stringify(rulePack)
+     }
+     global.simpleAjax(opts);
    }
 
   render() {
@@ -163,6 +184,10 @@ class CreateRule extends Component {
                 Describe the rule in text:
                </label>
                <textarea class="form-control text-form" cols="40" id="message" name="textForm" rows="20" onChange={this.handleChange.bind(this)}></textarea>
+
+              </div>
+              <div className="col col-lg-12 text-center">
+                <button class="btn btn-primary" onClick={this.convertToLogicalForm.bind(this)}>Convert to logical form</button>
               </div>
             </div>
             <div role="tabpanel" id="logicForm" class="tab-pane fade">
@@ -170,7 +195,7 @@ class CreateRule extends Component {
               <div className="col col-md-4">
                 <div className="card" id="rule-control-panel">
                   <div className="card-header">
-                  Control panel
+                  Add element
                   </div>
                   <div className="card-body">
                     <p>Logical connectives</p>
@@ -181,43 +206,16 @@ class CreateRule extends Component {
                     </div>
                     <hr />
                     <p>Predicates</p>
-                    <ul class="nav nav-tabs">
-                      <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#memory">Memory</a></li>
-                      <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#search">Search</a></li>
-                    </ul>
-                    <div class="container-fluid">
-                    <div class="tab-content">
-                      <div role="tabpanel" id="memory" class="tab-pane fade show active">
-                        <SelectableList
-                          items={memoryPredicatePacks}
-                          getItemView={
-                            function(item){
-                              return (
-                                <Predicate predicate={item.predicate} mode="READ-FOL" />
-                              );
-                            }
-                          }
-                          onSelectItem={
-                            (item)=>{
-                              this.addElement(item.predicate);
-                            }
-                          }
-                        />
-                      </div>
-                      <div role="tabpanel" id="search" class="tab-pane fade">
-                        <PredicateSearch onSelectItem={this.addElement} />
-                      </div>
-                    </div>
-                    </div>
+                    <PredicatePicker onSelectItem={this.addElement.bind(this)} />
                     <hr />
                     <div className="col col-lg-12 text-center">
-                      <button class="btn btn-danger" onClick={this.removeElement.bind(this)}>Remove</button>
+                      <button class="btn btn-danger" onClick={this.removeElement.bind(this)}>Remove element</button>
                     </div>
                   </div>
                 </div>
               </div>
               <div className="col col-md-8">
-                <Rule rule={rule} onSelectItem={this.onSelectItem.bind(this) } mode="READ-FOL-VAR"  onVarChange={this.onVarChange.bind(this)}/>
+                <Rule rule={rule} onSelectItem={this.onSelectItem.bind(this) } mode="EDIT-FOL-VAR"  onVarChange={this.onVarChange.bind(this)}/>
               </div>
 
               </div>

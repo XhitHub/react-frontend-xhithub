@@ -149,7 +149,7 @@ class Navbar extends Component {
            </li>
            <li className="nav-item">
               <a className="nav-link">
-                 <Link to={'/create-rule'}>Declare rule</Link>
+                 <Link to={'/rules'}>Rules</Link>
               </a>
            </li>
            <li className="nav-item">
@@ -184,7 +184,7 @@ class Navbar extends Component {
     return (
       <div className="">
          <nav className="navbar navbar-expand-lg navbar-light bg-light">
-            <a className="navbar-brand" href="#">KB-Shared</a>
+            <a className="navbar-brand" href="#">ICRS</a>
             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
             </button>

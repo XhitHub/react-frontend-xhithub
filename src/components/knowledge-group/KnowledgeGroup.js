@@ -13,7 +13,7 @@ class KnowledgeGroup extends Component {
 
       this.state = {
          knowledgeGroup: undefined,
-         predicates: []
+         rules: []
       }
    }
 
@@ -37,16 +37,31 @@ class KnowledgeGroup extends Component {
       }
       global.simpleAjax(opts);
 
-       var opts2 = {
-         url: global.apiUrl + 'knowledge/get-predicates-by-knowledge-group/'+kgid,
-         type: 'get',
-         success: (data) => {
-           this.setState({
-             predicates: data
-           });
-         }
-       }
-       global.simpleAjax(opts2);
+      var opts2 = {
+        url: global.apiUrl + 'knowledge/get-rules-by-knowledge-group/'+kgid,
+        type: 'get',
+        success: (data) => {
+          var wrappedData = [];
+          data.forEach((item) => {
+            wrappedData.push({rulePack: item});
+          })
+          this.setState({
+            rules: wrappedData
+          });
+        }
+      }
+      global.simpleAjax(opts2);
+
+       // var opts2 = {
+       //   url: global.apiUrl + 'knowledge/get-predicates-by-knowledge-group/'+kgid,
+       //   type: 'get',
+       //   success: (data) => {
+       //     this.setState({
+       //       predicates: data
+       //     });
+       //   }
+       // }
+       // global.simpleAjax(opts2);
    }
    componentWillReceiveProps(newProps) {
       console.log('Component WILL RECIEVE PROPS!')
@@ -67,19 +82,17 @@ class KnowledgeGroup extends Component {
     var kg = this.state.knowledgeGroup;
     const columns = [
       {
-        Header: 'Predicate',
-        accessor: 'predicate', // String-based value accessors!
-        Cell: props => <Predicate predicate={props.value} mode="READ-FOL" />
+        Header: 'Rule',
+        accessor: 'rulePack', // String-based value accessors!
+        Cell: props =>
+          <Link to={'/rule/'+props.value._id}>
+            <pre>{global.ruleToString(props.value.rule)}</pre>
+          </Link>
       },
       {
-        Header: 'Details',
-        accessor: '_id', // String-based value accessors!
-        Cell: props => <Link to={'/predicate/'+props.value}>Details</Link>
-      },
-      {
-        Header: 'Description',
-        accessor: 'info.description',
-        Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
+        Header: 'Text form',
+        accessor: 'rulePack', // String-based value accessors!
+        Cell: props => <span>{props.value.info.textForm}</span>
       }
     ];
 
@@ -93,7 +106,7 @@ class KnowledgeGroup extends Component {
               <p>{kg.description}</p>
             </div>
           </div>
-          
+
 
           <div className="card">
             <div className="card-header">
@@ -107,6 +120,12 @@ class KnowledgeGroup extends Component {
               </div>
             </div>
             <div className="card-body">
+            <ReactTable
+              data={this.state.rules}
+              columns={columns}
+              defaultPageSize="15"
+              pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
+            />
             </div>
           </div>
 
