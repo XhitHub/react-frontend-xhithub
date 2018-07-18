@@ -148,11 +148,18 @@ class CreateRule extends Component {
    submit(){
      var uniqueCheckString = global.ruleToString(this.state.rule,'unique')
      var mode = this.props.match.params.mode;
+     var knowledgeGroups;
+     if(mode == 'connect-related-predicates'){
+       knowledgeGroups = ['related-predicates-rules'];
+     }
+     else{
+       knowledgeGroups = this.state.knowledgeGroups;
+     }
      var rulePack = {
        rule: this.state.rule,
        info:{
          textForm: this.state.textForm,
-         knowledgeGroups: this.state.knowledgeGroups,
+         knowledgeGroups: knowledgeGroups,
          string: global.ruleToString(this.state.rule),
          uniqueCheckString: uniqueCheckString
        }
@@ -209,11 +216,22 @@ class CreateRule extends Component {
     var rule = this.state.rule;
     var memoryPredicatePacks = JSON.parse(localStorage.getItem('predicatesPacksPool'));
     var title;
+    var knowledgeGroupSection;
     if(mode == 'connect-related-predicates'){
       title = 'Create conversion rules for related predicates'
     }
     else{
       title = 'Create / edit rule'
+      knowledgeGroupSection = (
+        <div className="col offset-lg-0 col-lg-12">
+        <div class="form-group ">
+          <label class="control-label " for="name">
+           Knowledge groups this rule belongs to:
+          </label>
+          <KnowledgeGroupPicker onPickedGroupsChange={this.updateKnowledgeGroups.bind(this)} />
+        </div>
+        </div>
+      )
     }
     return (
       <div className="col col-lg-12">
@@ -233,7 +251,7 @@ class CreateRule extends Component {
 
               </div>
               <div className="col col-lg-12 text-center">
-                <button class="btn btn-primary" onClick={this.convertToLogicalForm.bind(this)}>Convert to logical form</button>
+                <button class="btn btn-default" onClick={this.convertToLogicalForm.bind(this)}>Convert to logical form</button>
               </div>
             </div>
             <div role="tabpanel" id="logicForm" class="tab-pane fade">
@@ -270,14 +288,7 @@ class CreateRule extends Component {
 
       </div>
       <hr />
-      <div className="col offset-lg-0 col-lg-12">
-      <div class="form-group ">
-        <label class="control-label " for="name">
-         Knowledge groups this rule belongs to:
-        </label>
-        <KnowledgeGroupPicker onPickedGroupsChange={this.updateKnowledgeGroups.bind(this)} />
-      </div>
-      </div>
+      {knowledgeGroupSection}
       <div className="col col-lg-12 text-center">
         <button class="btn btn-primary" onClick={this.submit.bind(this)}>Create rule</button>
       </div>

@@ -144,6 +144,9 @@ class Navbar extends Component {
            <li className="nav-item">
                  <Link to={'/knowledge-groups'}><a className="nav-link">Knowledge groups</a></Link>
            </li>
+          <li className="nav-item">
+             <a className="nav-link disabled" href="#">|</a>
+          </li>
            <li className="nav-item">
                  <Link to={'/predicates'}>
                     <a className="nav-link">Predicates
@@ -160,9 +163,32 @@ class Navbar extends Component {
                     <a className="nav-link">Rules
               </a></Link>
            </li>
-           <li className="nav-item">
-              <a className="nav-link disabled" href="#">Disabled</a>
-           </li>
+          <li className="nav-item">
+             <a className="nav-link disabled" href="#">|</a>
+          </li>
+           <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Automated problem solving
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <Link to={'/determine-fact'}>
+                  <a className="dropdown-item">
+                    Determine fact
+                  </a>
+                </Link>
+                <Link to={'/solve-way-to-goal'}>
+                  <a className="dropdown-item">
+                    Solve way to goal
+                  </a>
+                </Link>
+                <div class="dropdown-divider"></div>
+                <Link to={'/export-knowledge'}>
+                  <a className="dropdown-item">
+                    Export knowledge
+                  </a>
+                </Link>
+              </div>
+            </li>
         </ul>
       )
       account = (

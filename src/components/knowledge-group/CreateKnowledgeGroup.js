@@ -57,7 +57,7 @@ class CreateKnowledgeGroup extends Component {
    }
   render() {
     return (
-      <div className="col col-lg-12">
+      <div className="col offset-lg-2 col-lg-8">
         <h1>Create knowledge group</h1>
         <div class="form-group ">
           <label class="control-label " for="name">

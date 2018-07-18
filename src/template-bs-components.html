@@ -35,5 +35,31 @@
 
 <ul class="list-group">
   <li class="list-group-item">
-  </li>/
+  </li>
 </ul>
+
+
+
+
+
+<ul class="nav nav-tabs">
+  <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#related">Related</a></li>
+  <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#memory">Memory</a></li>
+  <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#search">Search</a></li>
+</ul>
+<div class="container-fluid">
+  <div class="tab-content">
+    <div role="tabpanel" id="related" class="tab-pane fade show active">
+      <ReactTable
+        data={wrappedData2}
+        columns={columns}
+        defaultPageSize="10"
+        pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
+      />
+    </div>
+    <div role="tabpanel" id="memory" class="tab-pane fade">
+    </div>
+    <div role="tabpanel" id="search" class="tab-pane fade">
+    </div>
+  </div>
+</div>

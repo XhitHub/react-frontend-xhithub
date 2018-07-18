@@ -8,6 +8,7 @@ import './App.css';
 import Template from './components/template/Template';
 import Navbar from './components/navbar/Navbar';
 import Login from './components/login/Login';
+
 import KnowledgeGroups from './components/pages/KnowledgeGroups';
 import Predicates from './components/pages/Predicates';
 import Rules from './components/pages/Rules';
@@ -16,6 +17,8 @@ import PredicateDetails from './components/pages/PredicateDetails';
 import RuleDetails from './components/pages/RuleDetails';
 import FactDetails from './components/pages/FactDetails';
 import Home from './components/pages/Home';
+import ExportKnowledge from './components/pages/ExportKnowledge';
+
 import KnowledgeGroup from './components/knowledge-group/KnowledgeGroup';
 import CreateKnowledgeGroup from './components/knowledge-group/CreateKnowledgeGroup';
 import CreatePredicate from './components/knowledge/CreatePredicate';
@@ -33,6 +36,13 @@ global.handleInputChange = function(componentThis,e){
   componentThis.setState(
     {
       [e.target.name]: e.target.value
+    }
+  );
+};
+global.handleInputChangeChk = function(componentThis,e){
+  componentThis.setState(
+    {
+      [e.target.name]: e.target.checked
     }
   );
 };
@@ -133,6 +143,7 @@ class App extends Component {
              <Route path='/predicate/:id' component={PredicateDetails} />
              <Route path='/fact/:id' component={FactDetails} />
              <Route path='/rule/:id' component={RuleDetails} />
+             <Route path='/export-knowledge' component={ExportKnowledge} />
            </Switch>
         </div>
         </div>

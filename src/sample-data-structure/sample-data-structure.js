@@ -1,0 +1,5 @@
+{
+  createdAt: 'asd',
+  groupsIncluded: [],
+  plFilesList: []
+}

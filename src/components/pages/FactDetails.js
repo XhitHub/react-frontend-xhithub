@@ -104,8 +104,8 @@ class FactDetails extends Component {
 
           <hr />
 
-          <div className="">
-          <div className="col col-lg-12">
+          <div className="row">
+          <div className="col offset-lg-2 col-lg-8">
           <h3 class="text-center">Text form</h3>
           <p>{rp.info.textForm}</p>
           </div>
