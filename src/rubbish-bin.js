@@ -236,9 +236,28 @@ and:[
 
 
 
+
+
 <div class="form-group ">
   <label class="control-label " for="name">
    Knowledge groups
   </label>
   <KnowledgeGroupPicker onPickedGroupsChange={this.updateKnowledgeGroups.bind(this)} />
 </div>
+
+
+
+
+
+confirmRelatedPredicates(){
+  var relatedPreds = [];
+  this.state.relatedPredicatesList.forEach((pp)=>{
+    if(pp.isRelated){
+      relatedPreds.push(pp);
+    }
+  });
+  console.log('confirmRelatedPredicates this.state.relatedPredicatesList',this.state.relatedPredicatesList);
+  console.log('confirmRelatedPredicates relatedPreds',relatedPreds);
+  localStorage.setItem('relatedPredicatePacks',JSON.stringify(relatedPreds));
+  this.props.history.push('/create-rule/connect-related-predicates')
+}

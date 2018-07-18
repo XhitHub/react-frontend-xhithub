@@ -53,12 +53,12 @@ class PredicateSearch extends Component {
        url: global.apiUrl + 'knowledge/search-predicate',
        type: 'post',
        success: (data) => {
-         var res = [];
+         var wrappedData = [];
          data.forEach((item) => {
-           res.push(item.predicate);
+           wrappedData.push({pack: item});
          })
          this.setState({
-           searchResults: data
+           searchResults: wrappedData
          });
        },
        data: JSON.stringify(arr)
@@ -69,15 +69,15 @@ class PredicateSearch extends Component {
     const columns = [
       {
         Header: 'Predicate',
-        accessor: 'predicate', // String-based value accessors!
+        accessor: 'pack', // String-based value accessors!
         Cell: props =>
           <div class="pointer" onClick={()=>{this.props.onSelectItem(props.value)}}>
-            <Predicate predicate={props.value} mode="READ-FOL" />
+            <Predicate predicate={props.value.predicate} mode="READ-FOL" />
           </div>
       },
       {
         Header: 'Description',
-        accessor: 'info.description',
+        accessor: 'pack.info.description',
         Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
       }
     ];

@@ -155,5 +155,29 @@ global.predicateToString = function(p){
   return raw;
 }
 
+global.predicateToUniqueString = function(p){
+  var sent = p.text.replace(/\s/g, '_');
+  var args = '';
+  if(p.arguments){
+    var arr = p.arguments;
+    arr.forEach((arg) => {
+      var argVar;
+      if(p.variables && p.variables[arg]){
+        argVar = '_var'
+      }
+      else if(p.parameters && p.parameters[arg]){
+        argVar = p.parameters[arg]
+      }
+      else{
+        argVar = arg
+      }
+      args += ", " + argVar
+    });
+    args = args.substring(2)
+  }
+  var raw = sent + "("+args+")";
+  return raw;
+}
+
 
 export default Predicate;

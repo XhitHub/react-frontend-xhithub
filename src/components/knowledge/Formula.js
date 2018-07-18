@@ -136,7 +136,7 @@ class Formula extends Component {
   }
 }
 
-global.formulaToString = function(formula){
+global.formulaToString = function(formula, type = 'display'){
   var and = ' ^ '
   var or = ' v '
   var not = ' !'
@@ -159,8 +159,18 @@ global.formulaToString = function(formula){
     return s.substring(and.length);
   }
   if(formula.text){
-    return global.predicateToString(formula);
+    if(type == 'display'){
+      return global.predicateToString(formula);
+    }
+    else if(type == 'unique'){
+      return global.predicateToUniqueString(formula);
+    }
   }
 }
+
+Predicate.defaultProps = {
+  mode: 'READ-FOL',
+  onSelectItem : (item)=>{}
+};
 
 export default Formula;

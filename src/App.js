@@ -84,6 +84,15 @@ global.getUserID = function(){
     return false;
   }
 }
+global.wrapData = function(dataName, arr){
+  var wrappedData = [];
+  arr.forEach((item) => {
+    var obj = {};
+    obj[dataName] = item;
+    wrappedData.push(obj);
+  })
+  return wrappedData;
+}
 global.loading = (
   <div id="global-loading" class="text-center">
     <h4>Loading</h4>

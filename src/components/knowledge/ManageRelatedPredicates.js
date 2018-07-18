@@ -4,8 +4,12 @@ import $ from 'jquery';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { withRouter } from "react-router-dom";
 
+import ReactTable from "react-table";
+import 'react-table/react-table.css';
+
 import PredicatePack from './PredicatePack';
 import Predicate from './Predicate';
+import PredicatePicker from "./PredicatePicker";
 
 var Combinatorics = require('js-combinatorics');
 
@@ -16,8 +20,15 @@ class ManageRelatedPredicates extends Component {
 
       this.state = {
          predicatePack: null,
-         relatedPredicates: null
+         relatedPredicates: null,
+         relatedPredicatePacks: [],
+         unrelatedPredicatePacks: [],
+         oldId: null
       }
+      this.addRelatedPredicate = this.addRelatedPredicate.bind(this)
+      this.addUnrelatedPredicate = this.addUnrelatedPredicate.bind(this)
+      this.removeRelatedPredicate = this.removeRelatedPredicate.bind(this)
+      this.removeUnrelatedPredicate = this.removeUnrelatedPredicate.bind(this)
    }
 
    handleChange(e){
@@ -41,6 +52,18 @@ class ManageRelatedPredicates extends Component {
         }
       }
       global.simpleAjax(opts);
+      var opts2 = {
+        url: global.apiUrl + 'knowledge/get-related-predicates-by-id/'+pid,
+        type: 'get',
+        success: (data) => {
+          this.setState({
+            relatedPredicatePacks: data.relatedPredicatePacks,
+            unrelatedPredicatePacks: data.unrelatedPredicatePacks,
+            oldId: data._id
+          });
+        }
+      }
+      global.simpleAjax(opts2);
    }
    componentWillReceiveProps(newProps) {
       console.log('Component WILL RECIEVE PROPS!')
@@ -59,6 +82,7 @@ class ManageRelatedPredicates extends Component {
    }
 
    findRelatedPredicates(){
+     var pid = this.props.match.params.id;
      var predPack = this.state.predicatePack;
      var allSynonymsDict = predPack.altFormInfo.allSynonymsDict;
      var predWords = [];
@@ -105,9 +129,13 @@ class ManageRelatedPredicates extends Component {
                //   matchCount: words.length
                // }
                relatedPredicatePack.matchCount = words.length
-               if(!relatedPredsList.find((item)=>{
-                 return item._id == relatedPredicatePack._id;
-               })){
+               if(
+                 relatedPredicatePack._id != pid
+                 &&
+                 !relatedPredsList.find((item)=>{
+                   return item._id == relatedPredicatePack._id;
+                 })
+               ){
                  relatedPredsList.push(relatedPredicatePack);
                }
              })
@@ -131,17 +159,75 @@ class ManageRelatedPredicates extends Component {
      this.setState({});
    }
 
+   addRelatedPredicate(predPack){
+     console.log('addRelatedPredicate predPack',predPack)
+     var rpps = this.state.relatedPredicatePacks;
+     if(!rpps.find(rpp=>{
+       return rpp._id == predPack._id
+     })){
+       rpps.push(predPack)
+     }
+     this.setState({
+       relatedPredicatePacks:rpps
+     })
+   }
+
+   addUnrelatedPredicate(predPack){
+     console.log('addRelatedPredicate predPack',predPack)
+     var rpps = this.state.unrelatedPredicatePacks;
+     if(!rpps.find(rpp=>{
+       return rpp._id == predPack._id
+     })){
+       rpps.push(predPack)
+     }
+     this.setState({
+       unrelatedPredicatePacks:rpps
+     })
+   }
+
+   removeRelatedPredicate(predPack){
+     var rpps = this.state.relatedPredicatePacks;
+     rpps = rpps.filter(pp=>{
+       return pp._id != predPack._id
+     })
+     this.setState({
+       relatedPredicatePacks:rpps
+     })
+   }
+
+   removeUnrelatedPredicate(predPack){
+     var rpps = this.state.unrelatedPredicatePacks;
+     rpps = rpps.filter(pp=>{
+       return pp._id != predPack._id
+     })
+     this.setState({
+       unrelatedPredicatePacks:rpps
+     })
+   }
+
    confirmRelatedPredicates(){
-     var relatedPreds = [];
-     this.state.relatedPredicatesList.forEach((pp)=>{
-       if(pp.isRelated){
-         relatedPreds.push(pp);
-       }
-     });
-     console.log('confirmRelatedPredicates this.state.relatedPredicatesList',this.state.relatedPredicatesList);
-     console.log('confirmRelatedPredicates relatedPreds',relatedPreds);
-     localStorage.setItem('relatedPredicatePacks',JSON.stringify(relatedPreds));
-     this.props.history.push('/create-rule/connect-related-predicates')
+     var pack = {
+       predicatePack: this.state.predicatePack,
+       relatedPredicatePacks: this.state.relatedPredicatePacks,
+       unrelatedPredicatePacks: this.state.unrelatedPredicatePacks
+     }
+     if(this.state.oldId){
+       pack._id = this.state.oldId;
+     }
+     var opts = {
+       url: global.apiUrl + 'knowledge/upsert-related-predicates',
+       type: 'post',
+       success: (data) => {
+         if(data){
+           alert('Related predicates updated.')
+           localStorage.setItem('relatedPredicatePacks',JSON.stringify(this.state.relatedPredicatePacks));
+           this.props.history.push('/create-rule/connect-related-predicates');
+         }
+       },
+       data: JSON.stringify(pack)
+     }
+     global.simpleAjax(opts);
+
    }
 
   render() {
@@ -184,7 +270,8 @@ class ManageRelatedPredicates extends Component {
               <Predicate predicate={pred} mode="READ-FOL" />
               </div>
               <div class="col-md-3">
-              {btn}
+                <input type="button" class="btn btn-danger" value="Not related" onClick={()=>{this.addUnrelatedPredicate(obj)}} />
+                <input type="button" class="btn btn-success" value="Is related" onClick={()=>{this.addRelatedPredicate(obj)}} />
               </div>
             </div>
             </li>
@@ -206,18 +293,73 @@ class ManageRelatedPredicates extends Component {
         )
       }
     }
+    const columnsR = [
+      {
+        Header: 'Predicate',
+        accessor: 'pack', // String-based value accessors!
+        Cell: props =>
+          <div class="">
+            <Predicate predicate={props.value.predicate} mode="READ-FOL" />
+          </div>
+      },
+      {
+        Header: 'Remove',
+        accessor: 'pack',
+        Cell: props => <i className='fa fa-times pointer' onClick={(()=>{this.removeRelatedPredicate(props.value)})}></i> // Custom cell components!
+      }
+    ];
+    const columnsUNR = [
+      {
+        Header: 'Predicate',
+        accessor: 'pack', // String-based value accessors!
+        Cell: props =>
+          <div class="">
+            <Predicate predicate={props.value.predicate} mode="READ-FOL" />
+          </div>
+      },
+      {
+        Header: 'Remove',
+        accessor: 'pack',
+        Cell: props => <i className='fa fa-times pointer' onClick={(()=>{this.removeUnrelatedPredicate(props.value)})}></i> // Custom cell components!
+      }
+    ];
     return (
       <div className="col col-lg-12">
-        <h1>Manage related predicates</h1>
-        <h4>The predicate:</h4>
-        {predicateInfo}
+        <h1 class="text-center">Manage related predicates</h1>
+        <h4 class="text-center">for</h4>
+        <h3 class="text-center">{predicateInfo}</h3>
+
         <hr />
-        <h4>Potentially related predicates</h4>
-        {relatedPredicatesView}
+        <div class="row text-center">
+          <div class="col-lg-6">
+            <h4>Related predicates</h4>
+            <ReactTable
+              data={global.wrapData('pack',this.state.relatedPredicatePacks)}
+              columns={columnsR}
+              defaultPageSize="10"
+              pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
+            />
+          </div>
+          <div class="col-lg-6">
+            <h4>unrelated predicates</h4>
+            <ReactTable
+              data={global.wrapData('pack',this.state.unrelatedPredicatePacks)}
+              columns={columnsUNR}
+              defaultPageSize="10"
+              pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
+            />
+          </div>
+        </div>
         <hr />
         <div className="col col-lg-12 text-center">
           <button class="btn btn-primary" onClick={this.confirmRelatedPredicates.bind(this)}>Confirm related predicates</button>
         </div>
+        <hr />
+        <h4>Potentially related predicates</h4>
+        {relatedPredicatesView}
+        <hr />
+        <h4>Pick related predicates we did not think of</h4>
+        <PredicatePicker mode="" onSelectItem={this.addRelatedPredicate.bind(this)} />
       </div>
 
     );

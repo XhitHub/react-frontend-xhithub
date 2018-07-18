@@ -72,8 +72,8 @@ class CreateFact extends Component {
        }
        else{
          if(!(selectItem.and || selectItem.or || selectItem.not)){
-           for(var k in elem){
-             selectItem[k] = elem[k]
+           for(var k in elem.predicate){
+             selectItem[k] = elem.predicate[k]
            }
            this.setState({});
          }

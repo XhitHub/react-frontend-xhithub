@@ -133,30 +133,32 @@ class Navbar extends Component {
       buttons = (
         <ul className="navbar-nav mr-auto">
            <li className="nav-item">
-              <a className="nav-link">
+
                  <Link to={'/'}>
-                 Home</Link>
-              </a>
+                   <a className="nav-link">
+                   <span><i class="fa fa-home"></i></span>
+                   </a>
+                 </Link>
+
            </li>
            <li className="nav-item">
-              <a className="nav-link">
-                 <Link to={'/knowledge-groups'}>Knowledge groups</Link>
-              </a>
+                 <Link to={'/knowledge-groups'}><a className="nav-link">Knowledge groups</a></Link>
            </li>
            <li className="nav-item">
-              <a className="nav-link">
-                 <Link to={'/predicates'}>Predicates</Link>
+                 <Link to={'/predicates'}>
+                    <a className="nav-link">Predicates
               </a>
+            </Link>
            </li>
            <li className="nav-item">
-              <a className="nav-link">
-                 <Link to={'/facts'}>Facts</Link>
-              </a>
+                 <Link to={'/facts'}>
+                    <a className="nav-link">Facts
+              </a></Link>
            </li>
            <li className="nav-item">
-              <a className="nav-link">
-                 <Link to={'/rules'}>Rules</Link>
-              </a>
+                 <Link to={'/rules'}>
+                    <a className="nav-link">Rules
+              </a></Link>
            </li>
            <li className="nav-item">
               <a className="nav-link disabled" href="#">Disabled</a>

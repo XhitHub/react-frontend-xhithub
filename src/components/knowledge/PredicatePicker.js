@@ -45,18 +45,23 @@ class PredicatePicker extends Component {
    }
   render() {
     var memoryPredicatePacks = JSON.parse(localStorage.getItem('predicatesPacksPool'));
+    var data = memoryPredicatePacks;
+    var wrappedData = [];
+    data.forEach((item) => {
+      wrappedData.push({pack: item});
+    })
     const columns = [
       {
         Header: 'Predicate',
-        accessor: 'predicate', // String-based value accessors!
+        accessor: 'pack', // String-based value accessors!
         Cell: props =>
           <div class="pointer" onClick={()=>{this.props.onSelectItem(props.value)}}>
-            <Predicate predicate={props.value} mode="READ-FOL" />
+            <Predicate predicate={props.value.predicate} mode="READ-FOL" />
           </div>
       },
       {
         Header: 'Description',
-        accessor: 'info.description',
+        accessor: 'pack.info.description',
         Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
       }
     ];
@@ -64,6 +69,11 @@ class PredicatePicker extends Component {
     var tabPanels;
     if(this.props.mode == 'connect-related-predicates'){
       var relatedPredicatePacks = JSON.parse(localStorage.getItem('relatedPredicatePacks'));
+      var data2 = relatedPredicatePacks;
+      var wrappedData2 = [];
+      data2.forEach((item) => {
+        wrappedData2.push({pack: item});
+      })
       navTabs = (
         <div className="col col-lg-12">
           <ul class="nav nav-tabs">
@@ -75,7 +85,7 @@ class PredicatePicker extends Component {
           <div class="tab-content">
             <div role="tabpanel" id="related" class="tab-pane fade show active">
               <ReactTable
-                data={relatedPredicatePacks}
+                data={wrappedData2}
                 columns={columns}
                 defaultPageSize="10"
                 pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
@@ -83,7 +93,7 @@ class PredicatePicker extends Component {
             </div>
             <div role="tabpanel" id="memory" class="tab-pane fade">
               <ReactTable
-                data={memoryPredicatePacks}
+                data={wrappedData}
                 columns={columns}
                 defaultPageSize="10"
                 pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
@@ -108,7 +118,7 @@ class PredicatePicker extends Component {
           <div class="tab-content">
             <div role="tabpanel" id="memory" class="tab-pane fade show active">
               <ReactTable
-                data={memoryPredicatePacks}
+                data={wrappedData}
                 columns={columns}
                 defaultPageSize="10"
                 pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}

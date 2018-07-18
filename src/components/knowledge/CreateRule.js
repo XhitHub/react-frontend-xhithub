@@ -78,8 +78,8 @@ class CreateRule extends Component {
        }
        else{
          if(!(selectItem.and || selectItem.or || selectItem.not)){
-           for(var k in elem){
-             selectItem[k] = elem[k]
+           for(var k in elem.predicate){
+             selectItem[k] = elem.predicate[k]
            }
            this.setState({});
          }
@@ -146,42 +146,62 @@ class CreateRule extends Component {
 
    }
    submit(){
+     var uniqueCheckString = global.ruleToString(this.state.rule,'unique')
      var mode = this.props.match.params.mode;
      var rulePack = {
        rule: this.state.rule,
        info:{
          textForm: this.state.textForm,
          knowledgeGroups: this.state.knowledgeGroups,
-         string: global.ruleToString(this.state.rule)
+         string: global.ruleToString(this.state.rule),
+         uniqueCheckString: uniqueCheckString
        }
      };
-     var opts = {
-       url: global.apiUrl + 'knowledge/rule',
+
+     var opts2 = {
+       url: global.apiUrl + 'knowledge/check-rule-uniqueness',
        type: 'post',
        success: (data) => {
-         alert('Rule is created successfully.');
-         if(mode == 'connect-related-predicates'){
-           this.setState(
-             {
-                rule: {
-                  lhs:{
+         if(data.length == 0){
+           var opts = {
+             url: global.apiUrl + 'knowledge/rule',
+             type: 'post',
+             success: (data) => {
+               alert('Rule is created successfully.');
+               if(mode == 'connect-related-predicates'){
+                 this.setState(
+                   {
+                      rule: {
+                        lhs:{
 
-                  },
-                  rhs:{
+                        },
+                        rhs:{
 
-                  }
-                },
-                textForm:''
-             }
-           )
+                        }
+                      },
+                      textForm:''
+                   }
+                 )
+               }
+               else{
+                 this.props.history.push('/rule/'+data._id);
+               }
+             },
+             data: JSON.stringify(rulePack)
+           }
+           global.simpleAjax(opts);
          }
          else{
-           this.props.history.push('/rule/'+data._id);
+           alert('This rule duplicates with an existing rule. It will not be created.');
          }
        },
-       data: JSON.stringify(rulePack)
+       data: JSON.stringify({
+         uniqueCheckString: uniqueCheckString
+       })
      }
-     global.simpleAjax(opts);
+     global.simpleAjax(opts2);
+
+
    }
 
   render() {

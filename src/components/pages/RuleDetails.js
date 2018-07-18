@@ -100,7 +100,7 @@ class RuleDetails extends Component {
           </div>
           <hr/ >
           <h3 class="text-center">Logical form</h3>
-          <Rule rule={rp.rule} mode="READ-FOL"/>
+          <Rule rule={rp.rule} mode="READ-FOL" onSelectItem={(item)=>{}} />
 
           <hr />
 

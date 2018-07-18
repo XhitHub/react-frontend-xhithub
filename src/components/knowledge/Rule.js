@@ -79,9 +79,9 @@ Rule.defaultProps = {
   mode: 'READ-FOL'
 };
 
-global.ruleToString = function(rule){
-  var lhs = global.formulaToString(rule.lhs);
-  var rhs = global.formulaToString(rule.rhs);
+global.ruleToString = function(rule, type = 'display'){
+  var lhs = global.formulaToString(rule.lhs, type);
+  var rhs = global.formulaToString(rule.rhs, type);
   return (lhs + '  -->  '+rhs);
 }
 
