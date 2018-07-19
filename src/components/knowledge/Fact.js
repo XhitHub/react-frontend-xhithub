@@ -49,7 +49,7 @@ class Fact extends Component {
               Fact
             </div>
             <div className="card-body">
-              <Formula formula={fact} onSelectItem={this.props.onSelectItem} mode={this.props.mode} onVarChange={this.props.onVarChange}/>
+              <Formula formula={fact} selectedItem={this.props.selectedItem} onSelectItem={this.props.onSelectItem} mode={this.props.mode} onVarChange={this.props.onVarChange}/>
             </div>
           </div>
         </div>

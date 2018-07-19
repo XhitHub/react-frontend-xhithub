@@ -5,3 +5,16 @@
 .predicate-details-title{
   padding: 30px;
 }
+
+#home-pic{
+  width: 100%;
+  height: auto;
+}
+
+.mode-buttons-container{
+  /* width: 70%; */
+}
+
+.kg-div{
+  height: 100%;
+}

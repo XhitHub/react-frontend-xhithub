@@ -100,7 +100,9 @@ class FactDetails extends Component {
           </div>
           <hr/ >
           <h3 class="text-center">Logical form</h3>
-          <Fact fact={rp.fact} mode="READ-FOL"/>
+          <div className="col offset-lg-2 col-lg-8">
+            <Fact fact={rp.fact} mode="READ-FOL"/>
+          </div>
 
           <hr />
 

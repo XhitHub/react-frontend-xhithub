@@ -62,6 +62,10 @@ class CreateRule extends Component {
      })
    }
    addElement(elem){
+     console.log('addElement elem',elem);
+     if(elem.predicate){
+       elem = elem.predicate;
+     }
      var selectItem = this.state.selectedItem;
      if(selectItem){
        if(selectItem.and){
@@ -78,8 +82,8 @@ class CreateRule extends Component {
        }
        else{
          if(!(selectItem.and || selectItem.or || selectItem.not)){
-           for(var k in elem.predicate){
-             selectItem[k] = elem.predicate[k]
+           for(var k in elem){
+             selectItem[k] = elem[k]
            }
            this.setState({});
          }
@@ -279,7 +283,8 @@ class CreateRule extends Component {
                 </div>
               </div>
               <div className="col col-md-8">
-                <Rule rule={rule} onSelectItem={this.onSelectItem.bind(this) } mode="EDIT-FOL-VAR"  onVarChange={this.onVarChange.bind(this)}/>
+                <h4>The rule:</h4>
+                <Rule rule={rule} selectedItem={this.state.selectedItem} onSelectItem={this.onSelectItem.bind(this) } mode="EDIT-FOL-VAR"  onVarChange={this.onVarChange.bind(this)}/>
               </div>
 
               </div>

@@ -51,3 +51,7 @@ a:hover{
 #global-loading{
   height: 500px;
 }
+
+hr.section-divider{
+  margin-top: 100px;
+}

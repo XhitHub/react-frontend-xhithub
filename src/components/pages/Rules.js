@@ -111,7 +111,7 @@ class Rules extends Component {
         accessor: 'rulePack', // String-based value accessors!
         Cell: props =>
           <Link to={'/rule/'+props.value._id}>
-            <pre>{global.ruleToString(props.value.rule)}</pre>
+            <p>{global.ruleToString(props.value.rule)}</p>
           </Link>
       },
       {

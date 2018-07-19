@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "clone-deep": "^4.0.0",
     "jquery": "^3.3.1",
     "js-combinatorics": "^0.5.3",
     "react": "^16.4.1",

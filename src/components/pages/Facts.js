@@ -111,7 +111,7 @@ class Facts extends Component {
         accessor: 'factPack', // String-based value accessors!
         Cell: props =>
           <Link to={'/fact/'+props.value._id}>
-            <pre>{global.formulaToString(props.value.fact)}</pre>
+            <p>{global.formulaToString(props.value.fact)}</p>
           </Link>
       },
       {

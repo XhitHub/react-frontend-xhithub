@@ -70,7 +70,7 @@ class Formula extends Component {
            );
          });
          var isSelected;
-         if(formula === this.state.selectedItem){
+         if(formula === this.props.selectedItem){
            isSelected = 'selected'
          }
          var type = 'card-header pointer '+group+' '+isSelected;
@@ -92,7 +92,7 @@ class Formula extends Component {
      groups.forEach((group)=>{
        if(formula[group]){
          var isSelected;
-         if(formula === this.state.selectedItem){
+         if(formula === this.props.selectedItem){
            isSelected = 'selected'
          }
          var type = 'card-header pointer '+group+' '+isSelected;
@@ -110,7 +110,7 @@ class Formula extends Component {
      });
      if(global.isPredicate(formula)){
        var isSelected;
-       if(formula === this.state.selectedItem){
+       if(formula === this.props.selectedItem){
          isSelected = 'selected'
        }
        var className = "col col-lg-12" +' '+ isSelected;

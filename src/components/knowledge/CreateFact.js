@@ -16,10 +16,11 @@ class CreateFact extends Component {
   constructor(props) {
       super(props);
 
+      var fact = {}
       this.state = {
-         fact: {
-         },
-         textForm:''
+         fact: fact,
+         textForm:'',
+         selectedItem: fact
       }
       this.addElement = this.addElement.bind(this);
    }
@@ -56,6 +57,10 @@ class CreateFact extends Component {
      })
    }
    addElement(elem){
+     console.log('addElement elem',elem);
+     if(elem.predicate){
+       elem = elem.predicate;
+     }
      var selectItem = this.state.selectedItem;
      if(selectItem){
        if(selectItem.and){
@@ -72,8 +77,8 @@ class CreateFact extends Component {
        }
        else{
          if(!(selectItem.and || selectItem.or || selectItem.not)){
-           for(var k in elem.predicate){
-             selectItem[k] = elem.predicate[k]
+           for(var k in elem){
+             selectItem[k] = elem[k]
            }
            this.setState({});
          }
@@ -208,7 +213,8 @@ class CreateFact extends Component {
                 </div>
               </div>
               <div className="col col-md-8">
-                <Fact fact={fact} onSelectItem={this.onSelectItem.bind(this) } mode="EDIT-FOL-VAR"  onVarChange={this.onVarChange.bind(this)}/>
+                <h4>The fact:</h4>
+                <Fact fact={fact} selectedItem={this.state.selectedItem} onSelectItem={this.onSelectItem.bind(this) } mode="EDIT-FOL-VAR"  onVarChange={this.onVarChange.bind(this)}/>
               </div>
 
               </div>

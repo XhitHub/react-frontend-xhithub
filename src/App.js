@@ -17,7 +17,7 @@ import PredicateDetails from './components/pages/PredicateDetails';
 import RuleDetails from './components/pages/RuleDetails';
 import FactDetails from './components/pages/FactDetails';
 import Home from './components/pages/Home';
-import ExportKnowledge from './components/pages/ExportKnowledge';
+import ProblemSolving from './components/pages/ProblemSolving';
 
 import KnowledgeGroup from './components/knowledge-group/KnowledgeGroup';
 import CreateKnowledgeGroup from './components/knowledge-group/CreateKnowledgeGroup';
@@ -143,7 +143,7 @@ class App extends Component {
              <Route path='/predicate/:id' component={PredicateDetails} />
              <Route path='/fact/:id' component={FactDetails} />
              <Route path='/rule/:id' component={RuleDetails} />
-             <Route path='/export-knowledge' component={ExportKnowledge} />
+             <Route path='/problem-solving' component={ProblemSolving} />
            </Switch>
         </div>
         </div>

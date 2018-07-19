@@ -129,7 +129,9 @@ class PredicateDetails extends Component {
       return (
         <div className="">
           <h3 class="text-center predicate-details-title"><Predicate predicate={pp.predicate} mode="READ-FOL"/></h3>
-
+          <div class="text-center">
+            <p>{pp.info.description}</p>
+          </div>
           <div class="text-center">
             {controlButtons}
           </div>

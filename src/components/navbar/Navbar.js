@@ -166,29 +166,13 @@ class Navbar extends Component {
           <li className="nav-item">
              <a className="nav-link disabled" href="#">|</a>
           </li>
-           <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Automated problem solving
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <Link to={'/determine-fact'}>
-                  <a className="dropdown-item">
-                    Determine fact
-                  </a>
-                </Link>
-                <Link to={'/solve-way-to-goal'}>
-                  <a className="dropdown-item">
-                    Solve way to goal
-                  </a>
-                </Link>
-                <div class="dropdown-divider"></div>
-                <Link to={'/export-knowledge'}>
-                  <a className="dropdown-item">
-                    Export knowledge
-                  </a>
-                </Link>
-              </div>
-            </li>
+          <li className="nav-item">
+                <Link to={'/problem-solving'}>
+                   <a className="nav-link">Automated problem solving
+             </a></Link>
+          </li>
+
+           
         </ul>
       )
       account = (

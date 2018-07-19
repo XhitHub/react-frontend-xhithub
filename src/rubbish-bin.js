@@ -261,3 +261,29 @@ confirmRelatedPredicates(){
   localStorage.setItem('relatedPredicatePacks',JSON.stringify(relatedPreds));
   this.props.history.push('/create-rule/connect-related-predicates')
 }
+
+
+
+<li class="nav-item dropdown">
+   <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+     Automated problem solving
+   </a>
+   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+     <Link to={'/determine-fact'}>
+       <a className="dropdown-item">
+         Determine fact
+       </a>
+     </Link>
+     <Link to={'/solve-way-to-goal'}>
+       <a className="dropdown-item">
+         Solve way to goal
+       </a>
+     </Link>
+     <div class="dropdown-divider"></div>
+     <Link to={'/export-knowledge'}>
+       <a className="dropdown-item">
+         Export knowledge
+       </a>
+     </Link>
+   </div>
+ </li>

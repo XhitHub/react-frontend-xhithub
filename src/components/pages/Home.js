@@ -59,11 +59,11 @@ class Template extends Component {
   render() {
     return (
       <div className="col col-lg-12">
-      <div class="jumbotron">
+      <div class="jumbotron text-center">
+        <img id="home-pic" src="https://cdn.pixabay.com/photo/2017/04/13/20/26/artificial-intelligence-2228610_960_720.jpg" />
       <h1 class="display-4">Intelligent collaborated reasoning system</h1>
-      <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
       <hr class="my-4" />
-      <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+      <p class="">A collaborative reasoning system with Intelligent knowledge base management for maximized knowledge compatibility.</p>
       <a class="btn btn-primary btn-lg" href="#" role="button">Start building knowledge</a>
       </div>
       </div>
