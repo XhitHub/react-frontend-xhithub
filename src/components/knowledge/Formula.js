@@ -73,10 +73,10 @@ class Formula extends Component {
          if(formula === this.props.selectedItem){
            isSelected = 'selected'
          }
-         var type = 'card-header pointer '+group+' '+isSelected;
+         var type = 'card atomic-statement pointer '+group+' '+isSelected;
          view = (
-           <div class="card atomic-statement">
-             <div class={type} onClick={()=>{this.selectItem(formula)}}>
+           <div class={type}>
+             <div class="card-header" onClick={()=>{this.selectItem(formula)}}>
                {group}
              </div>
              <div class="card-body">
@@ -95,10 +95,10 @@ class Formula extends Component {
          if(formula === this.props.selectedItem){
            isSelected = 'selected'
          }
-         var type = 'card-header pointer '+group+' '+isSelected;
+         var type = 'card atomic-statement pointer '+group+' '+isSelected;
          view = (
-           <div class="card atomic-statement">
-             <div class={type} onClick={()=>{this.selectItem(formula)}}>
+           <div class={type}>
+             <div class="card-header" onClick={()=>{this.selectItem(formula)}}>
                {group}
              </div>
              <div class="card-body">

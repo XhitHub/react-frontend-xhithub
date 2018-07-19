@@ -11,13 +11,13 @@ class PrologMaker {
        arr.forEach((arg) => {
          var argVar;
          if(p.variables && p.variables[arg]){
-           argVar = '_' + p.variables[arg]
+           argVar = p.variables[arg]
          }
          else if(p.parameters && p.parameters[arg]){
            argVar = p.parameters[arg]
          }
          else{
-           argVar = arg
+           argVar = '_'+arg
          }
          args += ", " + argVar
        });
@@ -58,6 +58,30 @@ class PrologMaker {
      var lhs = this.formulaToPL(rule.lhs);
      var rhs = this.formulaToPL(rule.rhs);
      return (rhs + '  :-  '+lhs);
+   }
+
+   rulePacksToPL(rulePacks){
+     var pl = ''
+     rulePacks.forEach((item) => {
+       pl += this.ruleToPL(item.rule) + '.\n';
+     })
+     return pl;
+   }
+
+   factPacksToPL(factPacks){
+     var pl = ''
+     factPacks.forEach((item) => {
+       pl += this.formulaToPL(item.fact) + '.\n';
+     })
+     return pl;
+   }
+
+   problemsToPL(problems){
+     var pl = 'consult(facts).\nconsult(rules).\n\n';
+     problems.forEach(p=>{
+       pl += '\n'+this.formulaToPL(p.fact)+'.';
+     })
+     return pl;
    }
 }
 

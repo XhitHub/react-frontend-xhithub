@@ -100,15 +100,13 @@ class PredicateSearch extends Component {
           </td>
           </tr>
         </table>
-        <div className="col col-lg-12">
+        <div className="">
           <ReactTable
             data={this.state.searchResults}
             columns={columns}
             defaultPageSize="10"
             pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
           />
-        </div>
-        <div className="col col-lg-12">
         </div>
       </div>
 

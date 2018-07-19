@@ -37,6 +37,7 @@ class Rule extends Component {
    }
   render() {
     var rule = this.props.rule;
+    var empty = {}
     // if(formula === this.state.selectedItem){
     //   isSelected = 'selected'
     // }
@@ -44,7 +45,7 @@ class Rule extends Component {
     return (
       <div className="col col-lg-12">
         <div className="col col-lg-12">
-          <div className="card">
+          <div className={this.props.selectedItem == rule.lhs?"card pointer selected":"card pointer"}>
             <div className="card-header pointer" onClick={()=>{this.props.onSelectItem(rule.lhs)}}>
             LHS
             </div>
@@ -61,7 +62,8 @@ class Rule extends Component {
         <p>Implies</p>
       </div>
       <div className="col col-lg-12">
-        <div className="card">
+        {console.log('render this.props.selectedItem',this.props.selectedItem)}
+        <div className={(this.props.selectedItem == rule.rhs)?"card pointer selected":"card pointer"}>
           <div className="card-header pointer" onClick={()=>{this.props.onSelectItem(rule.rhs)}}>
             RHS
           </div>

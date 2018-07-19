@@ -187,7 +187,11 @@ class ProblemSolving extends Component {
       this.setState({})
     }
     exportProblems(){
-
+      var pl = this.prologMaker.problemsToPL(this.state.problems);
+      // this.download("solve_problems.pl",pl);
+      this.setState({
+        plQuery: pl
+      })
     }
     createProblemSolvingRequest(){
 
@@ -195,7 +199,7 @@ class ProblemSolving extends Component {
   render() {
     var kgPickRules
     var kgPickFacts
-    var exportRulesBtn, exportFactsBtn, confirmProblemsBtn
+    var exportRulesBtn, exportFactsBtn, confirmProblemsBtn, plQueryTextarea
     if(!this.state.exportAllRules){
       kgPickRules = (
         <KnowledgeGroupPicker onPickedGroupsChange={this.updateRulesKnowledgeGroups.bind(this)} />
@@ -220,9 +224,17 @@ class ProblemSolving extends Component {
       confirmProblemsBtn = (
         <div className="col col-lg-12 text-center">
           <button class="btn btn-primary" onClick={this.exportProblems.bind(this)}>
-          <h4>Export problems</h4>
+          <h4>Generate problems queries</h4>
           <p>(No need to export facts, rules again unless facts/rules are modified)</p>
           </button>
+        </div>
+      )
+      plQueryTextarea = (
+        <div class="row">
+          <div class="col">
+            <h4>Problems queries:</h4>
+            <textarea id="pl-queries-textarea" value={this.state.plQuery}></textarea>
+          </div>
         </div>
       )
     }
@@ -327,28 +339,12 @@ class ProblemSolving extends Component {
         <div className="row">
         <div class="col-lg-12">
         <h4 class="">Define problem:</h4>
-        <h5 class="">Problem type:</h5>
-          <div className="row mode-buttons-container">
-          <div className="col offset-lg-2 col-lg-4 text-center">
-            <button class={this.state.problemType == 'fact-check' ? 'btn btn-outline-primary' : 'btn btn-outline-secondary'} onClick={()=>{this.setState({problemType: 'fact-check'})}}>
-              <h3>Fact check</h3>
-              <hr />
-              <p>Check whether a fact is true / false</p>
-            </button>
-          </div>
-          <div className="col col-lg-4 text-center">
-            <button class={this.state.problemType == 'way-to-goal' ? 'btn btn-outline-primary' : 'btn btn-outline-secondary'} onClick={()=>{this.setState({problemType: 'way-to-goal'})}}>
-              <h3>Find way(s) to goal</h3>
-              <hr />
-              <p>Find way(s) to achieve a certain goal(In form of a fact)</p>
-            </button>
-          </div>
-      </div>
+
       <div className="row">
       <div class="col-lg-12">
           <div className="card">
             <div className="card-body">
-              <FactBuilder updateFact={this.updateFact.bind(this)} factName={this.state.problemType == 'fact-check' ? 'Fact to be checked' : 'Goal to be achieved'}/>
+              <FactBuilder updateFact={this.updateFact.bind(this)} factName={''}/>
             </div>
           </div>
         </div>
@@ -382,7 +378,7 @@ class ProblemSolving extends Component {
       </div>
       <hr class="section-divider" />
 
-        {this.state.pl}
+      {plQueryTextarea}
       </div>
 
     );

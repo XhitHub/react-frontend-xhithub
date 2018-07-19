@@ -10,7 +10,8 @@ class Predicate extends Component {
       this.state = {
          predicate: props.predicate,
          mode: props.mode,
-         readOnly: props.readOnly
+         readOnly: props.readOnly,
+         modeDatas: []
       }
    }
 
@@ -84,7 +85,10 @@ class Predicate extends Component {
       var args = [];
       p.arguments.forEach((arg) => {
         args.push(
-          <span><input type="text" name={arg} placeholder={arg} onChange={(e)=>{this.props.onVarChange(e,this.props.predicate)}}/>, </span>
+          <span>
+            <input type="text" name={arg} placeholder={arg} onChange={(e)=>{this.props.onVarChange(e,this.props.predicate)}}/>
+            ,
+          </span>
         )
       });
       var raw = sent + "("+args+")";

@@ -287,3 +287,33 @@ confirmRelatedPredicates(){
      </Link>
    </div>
  </li>
+
+
+
+
+
+
+
+ <h5 class="">Problem type:</h5>
+   <div className="row mode-buttons-container">
+   <div className="col offset-lg-2 col-lg-4 text-center">
+     <button class={this.state.problemType == 'fact-check' ? 'btn btn-outline-primary' : 'btn btn-outline-secondary'} onClick={()=>{this.setState({problemType: 'fact-check'})}}>
+       <h3>Fact check</h3>
+       <hr />
+       <p>Check whether a fact is true / false</p>
+     </button>
+   </div>
+   <div className="col col-lg-4 text-center">
+     <button class={this.state.problemType == 'way-to-goal' ? 'btn btn-outline-primary' : 'btn btn-outline-secondary'} onClick={()=>{this.setState({problemType: 'way-to-goal'})}}>
+       <h3>Find way(s) to goal</h3>
+       <hr />
+       <p>Find way(s) to achieve a certain goal(In form of a fact)</p>
+     </button>
+   </div>
+ </div>
+
+
+
+
+
+ this.state.problemType == 'fact-check' ? 'Fact to be checked' : 'Goal to be achieved'

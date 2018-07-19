@@ -15,17 +15,18 @@ import KnowledgeGroupPicker from "../knowledge-group/KnowledgeGroupPicker";
 class CreateRule extends Component {
   constructor(props) {
       super(props);
+      var rule = {
+        lhs:{
 
+        },
+        rhs:{
+
+        }
+      }
       this.state = {
-         rule: {
-           lhs:{
-
-           },
-           rhs:{
-
-           }
-         },
-         textForm:''
+         rule: rule,
+         textForm:'',
+         selectedItem: rule.lhs
       }
       this.addElement = this.addElement.bind(this);
    }

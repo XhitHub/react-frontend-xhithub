@@ -44,7 +44,7 @@ class Fact extends Component {
     return (
       <div className="col col-lg-12">
         <div className="col col-lg-12">
-          <div className="card">
+          <div className={this.props.selectedItem == fact?"card pointer selected":"card pointer"}>
             <div className="card-header pointer" onClick={()=>{this.props.onSelectItem(fact)}}>
               Fact
             </div>
