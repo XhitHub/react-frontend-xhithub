@@ -105,15 +105,21 @@ class KnowledgeGroups extends Component {
    }
 
   render() {
-    const columns = [{
-      Header: 'Name',
-      accessor: 'knowledgeGroup', // String-based value accessors!
-      Cell: props => <Link to={'/knowledge-group/'+props.value._id}>{props.value.name}</Link>
-    }, {
-      Header: 'Description',
-      accessor: 'knowledgeGroup.description',
-      Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
-    }];
+    const columns = [
+      {
+        Header: 'Name',
+        accessor: 'knowledgeGroup', // String-based value accessors!
+        Cell: props => <Link to={'/knowledge-group/'+props.value._id}>{props.value.name}</Link>
+      }, {
+        Header: 'Description',
+        accessor: 'knowledgeGroup.description',
+        Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
+      }, {
+        Header: 'Created by',
+        accessor: 'knowledgeGroup.createdByName',
+        Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
+      }
+    ];
     return (
       <div className="col col-lg-12">
         <h1>Knowledge Groups</h1>

@@ -129,6 +129,15 @@ class Navbar extends Component {
   render() {
     var buttons;
     var account;
+    var failedMessage;
+    if(this.state.loginFailed){
+      failedMessage = (
+        <div>
+          <hr />
+          <p>Login failed.</p>
+        </div>
+      )
+    }
     if(this.state.user){
       buttons = (
         <ul className="navbar-nav mr-auto">
@@ -256,6 +265,7 @@ class Navbar extends Component {
                                 onClick={this.login.bind(this)}
                             />
                         </form>
+                        {failedMessage}
                       </div>
                       </div>
                   </div>
