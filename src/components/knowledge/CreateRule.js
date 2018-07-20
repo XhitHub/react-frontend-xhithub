@@ -222,6 +222,7 @@ class CreateRule extends Component {
     var memoryPredicatePacks = JSON.parse(localStorage.getItem('predicatesPacksPool'));
     var title;
     var knowledgeGroupSection;
+    var connectiveBtns;
     if(mode == 'connect-related-predicates'){
       title = 'Create conversion rules for related predicates'
     }
@@ -235,6 +236,19 @@ class CreateRule extends Component {
           </label>
           <KnowledgeGroupPicker onPickedGroupsChange={this.updateKnowledgeGroups.bind(this)} />
         </div>
+        </div>
+      )
+    }
+    if(this.state.selectedItem != rule.rhs){
+      connectiveBtns = (
+        <div>
+          <p>Logical connectives</p>
+          <div class="btn-group" role="group" aria-label="Add elements">
+            <button class="btn btn-default" onClick={()=>{this.addElement({and: []})}}>AND</button>
+            <button class="btn btn-default" onClick={()=>{this.addElement({or: []})}}>OR</button>
+            <button class="btn btn-default" onClick={()=>{this.addElement({not: {}})}}>NOT</button>
+          </div>
+          <hr />
         </div>
       )
     }
@@ -267,13 +281,7 @@ class CreateRule extends Component {
                   Add element
                   </div>
                   <div className="card-body">
-                    <p>Logical connectives</p>
-                    <div class="btn-group" role="group" aria-label="Add elements">
-                      <button class="btn btn-default" onClick={()=>{this.addElement({and: []})}}>AND</button>
-                      <button class="btn btn-default" onClick={()=>{this.addElement({or: []})}}>OR</button>
-                      <button class="btn btn-default" onClick={()=>{this.addElement({not: {}})}}>NOT</button>
-                    </div>
-                    <hr />
+                    {connectiveBtns}
                     <p>Predicates</p>
                     <PredicatePicker mode={mode} onSelectItem={this.addElement.bind(this)} />
                     <hr />

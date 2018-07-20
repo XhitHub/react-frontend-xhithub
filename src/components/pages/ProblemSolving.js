@@ -25,7 +25,7 @@ class ProblemSolving extends Component {
            exportAllFacts: false,
           newOnly: true,
           pl: '',
-          solveMode: 'local',
+          solveMode: 'server',
           problemType: 'fact-check',
           fact:{},
           problems:[]
@@ -210,14 +210,14 @@ class ProblemSolving extends Component {
         problem
       )
       var opts = {
-        url: global.apiUrl + 'reasoning/query',
+        url: global.apiUrl + 'reasoning/solve-problem',
         type: 'post',
         success: (data) => {
           problem.result = data;
           this.setState({});
         },
         data: JSON.stringify({
-          query: 'goal(X)',
+          // query: 'goal(X)',
           problem: problem
         })
       }
