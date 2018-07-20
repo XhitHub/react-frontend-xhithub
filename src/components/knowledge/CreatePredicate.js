@@ -5,6 +5,9 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { withRouter } from "react-router-dom";
 import Binder from 'react-binding';
 
+import ReactTable from "react-table";
+import 'react-table/react-table.css';
+
 import SearchWithList from "../general/SearchWithList";
 import KnowledgeGroupPicker from "../knowledge-group/KnowledgeGroupPicker";
 import Predicate from './Predicate';
@@ -214,39 +217,50 @@ class CreatePredicate extends Component {
             if (ts.hasOwnProperty(key)) {
                 var arr = ts[key]
                 if(arr.length > 0){
-                  var keySynViews = []
-                  arr.forEach((syn) => {
-                    var btn;
-                    if(syn.isValid){
-                      btn = (
-                        <input type="button" class="btn btn-success" value="Valid" onClick={()=>{this.toggleSynonymIsValid(syn)}} />
-                      )
+                  var columns = [
+                    {
+                      Header: 'Synonym',
+                      accessor: 'syn.name',
+                      Cell: props => <p>{props.value.split('.')[0]}</p>
+                    }, {
+                      Header: 'Word type',
+                      accessor: 'syn.name',
+                      Cell: props => <p>{props.value.split('.')[1]}</p>
+                    }, {
+                      Header: 'Definition',
+                      accessor: 'syn.definition',
+                      Cell: props => <p>{props.value}</p>
+                    }, {
+                      Header: 'Is synonym valid?',
+                      accessor: 'syn',
+                      Cell: props => {
+                        var btn;
+                        if(props.value.isValid){
+                          btn = (
+                            <input type="button" class="btn btn-success" value="Valid" onClick={()=>{this.toggleSynonymIsValid(props.value)}} />
+                          )
+                        }
+                        else{
+                          btn = (
+                            <input type="button" class="btn btn-fail" value="invalid" onClick={()=>{this.toggleSynonymIsValid(props.value)}} />
+                          )
+                        }
+                        return btn
+                      }
                     }
-                    else{
-                      btn = (
-                        <input type="button" class="btn btn-fail" value="invalid" onClick={()=>{this.toggleSynonymIsValid(syn)}} />
-                      )
-                    }
-                    keySynViews.push(
-                      <tr>
-                        <td>{syn.name.split('.')[0]}</td>
-                        <td>{syn.name.split('.')[1]}</td>
-                        <td>{syn.definition}</td>
-                        <td>
-                        {btn}
-                        </td>
-                      </tr>
-                    )
-                  });
+                  ];
                   synViews.push(
                     <div class="card">
                       <div class="card-header">
                       {key}
                       </div>
-                      <div class="card-body">
-                        <table class="table">
-                          {keySynViews}
-                        </table>
+                      <div class="card-body text-center">
+                        <ReactTable
+                          data={global.wrapData('syn',arr)}
+                          columns={columns}
+                          defaultPageSize="15"
+                          pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
+                        />
                       </div>
                     </div>
                   )
@@ -309,7 +323,7 @@ class CreatePredicate extends Component {
                  <input class="form-control" id="name" name="name" type="text" onChange={this.updateTerms.bind(this)}/>
               </div>
 
-              
+
 
 
 
