@@ -127,10 +127,9 @@ class ProblemSolving extends Component {
            pl += this.prologMaker.ruleToPL(item.rule) + '.\n';
          })
          this.setState({
-           plRules: pl,
+           pl: pl,
          });
-         alert('Rules prepared.')
-         // this.download("rules.pl",pl);
+         this.download("rules.pl",pl);
        }
      }
      if(!this.state.exportAllRules){
@@ -154,10 +153,9 @@ class ProblemSolving extends Component {
             pl += this.prologMaker.formulaToPL(item.fact) + '.\n';
           })
           this.setState({
-            plFacts: pl,
+            pl: pl,
           });
-          alert('Facts prepared.')
-          // this.download("facts.pl",pl);
+          this.download("facts.pl",pl);
         }
       }
       if(!this.state.exportAllFacts){
@@ -195,37 +193,6 @@ class ProblemSolving extends Component {
         plQuery: pl
       })
     }
-    exportKnowledge(){
-      var pl = this.state.plRules + '\n\n' + this.state.plFacts;
-      this.download('knowledge.pl',pl);
-    }
-    solveProblem(problem){
-      var problem =
-        {
-          type: this.state.problemType,
-          fact: cloneDeep(this.state.fact),
-          result: undefined
-        }
-      this.state.problems.push(
-        problem
-      )
-      var opts = {
-        url: global.apiUrl + 'reasoning/query',
-        type: 'post',
-        success: (data) => {
-          problem.result = data;
-          this.setState({});
-        },
-        data: JSON.stringify({
-          query: 'goal(X)',
-          problem: problem
-        })
-      }
-      global.simpleAjax(opts);
-      this.setState({
-        fact: {}
-      })
-    }
     createProblemSolvingRequest(){
 
     }
@@ -233,50 +200,6 @@ class ProblemSolving extends Component {
     var kgPickRules
     var kgPickFacts
     var exportRulesBtn, exportFactsBtn, confirmProblemsBtn, plQueryTextarea
-    var exportKnowledgeBtn
-    var defineProblemSection
-    const columns = [
-      {
-        Header: 'Fact / goal',
-        accessor: 'fact', // String-based value accessors!
-        Cell: props =>
-          <p class="">
-            {global.formulaToString(props.value)}
-          </p>
-      },
-      {
-        Header: 'Solution(s)',
-        accessor: 'result', // String-based value accessors!
-        Cell: props =>{
-          console.log('props.value',props.value);
-          var solViews = [];
-          if(props.value){
-            props.value.forEach(item=>{
-              var s = '';
-              for (var k in item){
-                s += ', ' + k + ': '+item[k];
-              }
-              s=s.substring(2);
-              solViews.push(
-                  <li class="list-group-item">
-                  {s}
-                  </li>
-              )
-            })
-            return (
-              <ul class="list-group">
-                {solViews}
-              </ul>
-            )
-          }
-          else{
-            return (
-              <p>(Pending...)</p>
-            )
-          }
-        }
-      }
-    ];
     if(!this.state.exportAllRules){
       kgPickRules = (
         <KnowledgeGroupPicker onPickedGroupsChange={this.updateRulesKnowledgeGroups.bind(this)} />
@@ -290,12 +213,12 @@ class ProblemSolving extends Component {
     if(this.state.solveMode == 'local'){
       exportRulesBtn = (
         <div className="col col-lg-12 text-center">
-          <button class="btn btn-primary" onClick={this.exportRules.bind(this)}>Prepare rules</button>
+          <button class="btn btn-primary" onClick={this.exportRules.bind(this)}>Export</button>
         </div>
       )
       exportFactsBtn = (
         <div className="col col-lg-12 text-center">
-          <button class="btn btn-primary" onClick={this.exportFacts.bind(this)}>Prepare facts</button>
+          <button class="btn btn-primary" onClick={this.exportFacts.bind(this)}>Export</button>
         </div>
       )
       confirmProblemsBtn = (
@@ -314,66 +237,37 @@ class ProblemSolving extends Component {
           </div>
         </div>
       )
-      if(true || this.state.plRules && this.state.plFacts){
-        exportKnowledgeBtn=(
-          <div class="row">
-            <hr />
-            <div className="col col-lg-12 text-center">
-              <button class="btn btn-primary" onClick={this.exportKnowledge.bind(this)}>
-              <h4>Export knowledge</h4>
-              <hr />
-              <p>Export knowledge as .pl file to be executed by SWI-prolog locally.</p>
-              </button>
-            </div>
-          </div>
-        )
-      }
     }
     else{
-      defineProblemSection = (
-        <div className="">
-            <div className="row">
-            <div class="col-lg-12">
-            <h4 class="">Define problem:</h4>
-
-          <div className="row">
-          <div class="col-lg-12">
-              <div className="card">
-                <div className="card-body">
-                  <FactBuilder updateFact={this.updateFact.bind(this)} factName={''}/>
-                </div>
-              </div>
-            </div>
-            </div>
-          </div>
-          </div>
-
-        <div className="row">
-          <div className="col col-lg-12 text-center">
-            <button class="btn btn-primary" onClick={this.solveProblem.bind(this)}>Solve problem</button>
-          </div>
+      confirmProblemsBtn = (
+        <div className="col col-lg-12 text-center">
+          <button class="btn btn-primary" onClick={this.createProblemSolvingRequest.bind(this)}>
+          <h4>Create problem solving request</h4>
+          </button>
         </div>
-
-          <hr class="section-divider"/>
-
-          <div className="row">
-            <div class="col-lg-12">
-            <h4 class="">Problem(s) to be solved:</h4>
-            <div class="text-center">
-            <ReactTable
-              data={this.state.problems}
-              columns={columns}
-              defaultPageSize="10"
-              pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
-            />
-            </div>
-            </div>
-          </div>
-          </div>
       )
     }
-
-
+    const columns = [
+      {
+        Header: 'Problem type',
+        accessor: 'type', // String-based value accessors!
+        Cell: props =>
+            <p>{props.value}</p>
+      },
+      {
+        Header: 'Fact / goal',
+        accessor: 'fact', // String-based value accessors!
+        Cell: props =>
+          <p class="">
+            {global.formulaToString(props.value)}
+          </p>
+      },
+      {
+        Header: 'Remove',
+        accessor: 'fact',
+        Cell: props => <i className='fa fa-times pointer' onClick={(()=>{this.removeProblem(props.value)})}></i> // Custom cell components!
+      }
+    ];
     return (
       <div className="">
         <h1>Automated problem solving</h1>
@@ -403,8 +297,8 @@ class ProblemSolving extends Component {
         <hr class="section-divider" />
         <h4 class="">Knowledge to be used:</h4>
         <div className="row">
-          <div class="col-lg-6">
-            <div className="card kg-div">
+          <div class="col-lg-6 kg-div">
+            <div className="card ">
               <div className="card-header">
               Rules
               </div>
@@ -421,8 +315,8 @@ class ProblemSolving extends Component {
             </div>
           </div>
 
-          <div class="col-lg-6 ">
-            <div className="card kg-div">
+          <div class="col-lg-6 kg-div">
+            <div className="card ">
               <div className="card-header">
               Facts
               </div>
@@ -438,13 +332,54 @@ class ProblemSolving extends Component {
               </div>
             </div>
           </div>
-
         </div>
-        {exportKnowledgeBtn}
+
         <hr class="section-divider" />
 
-        {defineProblemSection}
+        <div className="row">
+        <div class="col-lg-12">
+        <h4 class="">Define problem:</h4>
+
+      <div className="row">
+      <div class="col-lg-12">
+          <div className="card">
+            <div className="card-body">
+              <FactBuilder updateFact={this.updateFact.bind(this)} factName={''}/>
+            </div>
+          </div>
         </div>
+        </div>
+      </div>
+      </div>
+
+    <div className="row">
+      <div className="col col-lg-12 text-center">
+        <button class="btn btn-primary" onClick={this.addProblem.bind(this)}>Add problem</button>
+      </div>
+    </div>
+
+      <hr class="section-divider"/>
+
+      <div className="row">
+        <div class="col-lg-12">
+        <h4 class="">Problem(s) to be solved:</h4>
+        <div class="text-center">
+        <ReactTable
+          data={this.state.problems}
+          columns={columns}
+          defaultPageSize="10"
+          pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
+        />
+        </div>
+        </div>
+      </div>
+      <div class="row">
+      {confirmProblemsBtn}
+      </div>
+      <hr class="section-divider" />
+
+      {plQueryTextarea}
+      </div>
 
     );
   }

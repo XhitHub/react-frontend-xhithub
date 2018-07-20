@@ -34,14 +34,14 @@ class PrologMaker {
      if(formula.and){
        var s = ''
        formula.and.forEach(item=>{
-         s += (and + this.formulaToPL(item));
+         s += '('+ and + this.formulaToPL(item)+')';
        })
        return s.substring(and.length);
      }
      if(formula.or){
        var s = ''
        formula.or.forEach(item=>{
-         s += (or + this.formulaToPL(item));
+         s += '('+ or + this.formulaToPL(item)+')';
        })
        return s.substring(or.length);
      }
