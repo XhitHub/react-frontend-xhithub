@@ -48,7 +48,7 @@ class PredicateSearch extends Component {
    }
    search(e){
      var str = this.state.keywords;
-     var arr = str.split(' ');
+     var arr = str.split(/\s+/)
      var opts = {
        url: global.apiUrl + 'knowledge/search-predicate',
        type: 'post',

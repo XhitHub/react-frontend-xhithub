@@ -223,7 +223,6 @@ class ProblemSolving extends Component {
       }
       global.simpleAjax(opts);
       this.setState({
-        fact: {}
       })
     }
     createProblemSolvingRequest(){

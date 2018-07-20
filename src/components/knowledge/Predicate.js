@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './style.css';
 import $ from 'jquery';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import PrologMaker from "../general/PrologMaker";
 
 class Predicate extends Component {
   constructor(props) {
@@ -13,6 +14,7 @@ class Predicate extends Component {
          readOnly: props.readOnly,
          modeDatas: []
       }
+      this.prologMaker = new PrologMaker()
    }
 
    handleChange(e){
@@ -68,15 +70,15 @@ class Predicate extends Component {
     }
 
     if(this.state.mode == 'READ-FOL'){
-      var sent = p.text.replace(/\s/g, '_');
-      var args = "";
-      p.arguments.forEach((arg) => {
-        args += ", " + arg
-      })
-      args = args.substring(2)
-      var raw = sent + "("+args+")";
+      // var sent = p.text.replace(/\s/g, '_');
+      // var args = "";
+      // p.arguments.forEach((arg) => {
+      //   args += ", " + arg
+      // })
+      // args = args.substring(2)
+      // var raw = sent + "("+args+")";
       content = (
-        <span class="predicate-read-fol">{raw}</span>
+        <span class="predicate-read-fol">{this.prologMaker.predicateToPL(p)}</span>
       )
     }
 
@@ -86,7 +88,7 @@ class Predicate extends Component {
       p.arguments.forEach((arg) => {
         args.push(
           <span>
-            <input type="text" name={arg} placeholder={arg} onChange={(e)=>{this.props.onVarChange(e,this.props.predicate)}}/>
+            <input type="text" name={arg} placeholder={'_'+arg} onChange={(e)=>{this.props.onVarChange(e,this.props.predicate)}}/>
             ,
           </span>
         )

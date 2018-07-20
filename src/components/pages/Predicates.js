@@ -8,6 +8,7 @@ import ReactTable from "react-table";
 import 'react-table/react-table.css';
 
 import Predicate from '../knowledge/Predicate';
+import PrologMaker from "../general/PrologMaker";
 
 class Predicates extends Component {
   constructor(props) {

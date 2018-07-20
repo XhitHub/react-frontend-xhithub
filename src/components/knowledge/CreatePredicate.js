@@ -98,7 +98,7 @@ class CreatePredicate extends Component {
    }
 
    updateTerms(e){
-     const args = e.target.value.split(/,/);
+     const args = e.target.value.split(/,\s*/);
      console.log('updateTerms args',args)
      var predicate = this.state.predicatePack.predicate;
      predicate.arguments = args;
