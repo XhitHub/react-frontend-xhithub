@@ -9,6 +9,7 @@ import Template from './components/template/Template';
 import Navbar from './components/navbar/Navbar';
 import Login from './components/login/Login';
 
+import Register from './components/pages/Register';
 import KnowledgeGroups from './components/pages/KnowledgeGroups';
 import Predicates from './components/pages/Predicates';
 import Rules from './components/pages/Rules';
@@ -127,6 +128,7 @@ class App extends Component {
         <Navbar></Navbar>
            <Switch>
              <Route exact path='/' component={Home} />
+             <Route exact path='/register' component={Register} />
              <Route exact path='/login' component={Login} />
              <Route exact path='/knowledge-groups' component={KnowledgeGroups} />
              <Route exact path='/predicates' component={Predicates} />

@@ -172,7 +172,7 @@ class Navbar extends Component {
              </a></Link>
           </li>
 
-           
+
         </ul>
       )
       account = (
@@ -192,11 +192,19 @@ class Navbar extends Component {
       )
     }
     else{
-      account = (
-        <div className="right-flex">
-         <a className="nav-link pointer" data-toggle="modal" data-target="#myModal">Login</a>
+      buttons = (
+        <ul className="navbar-nav mr-auto">
+           <li className="nav-item">
+             <Link to={'/register'}>
+               <a className="nav-link pointer">Register</a>
+             </Link>
+          </li>
+          <li className="nav-item">
+            <a className="nav-link pointer" data-toggle="modal" data-target="#myModal">Login</a>
+          </li>
 
-         </div>
+
+        </ul>
       )
     }
     return (
