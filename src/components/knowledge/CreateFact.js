@@ -133,10 +133,15 @@ class CreateFact extends Component {
      this.setState({})
    }
    onVarChange(e,pred){
-     if(!pred.parameters){
-       pred.parameters = {}
+     // if(!pred.parameters){
+     //   pred.parameters = {}
+     // }
+     // pred.parameters[e.target.name] = e.target.value;
+
+     if(!pred.variables){
+       pred.variables = {}
      }
-     pred.parameters[e.target.name] = e.target.value;
+     pred.variables[e.target.name] = e.target.value;
      this.setState({})
      console.log('this.state.fact',this.state.fact);
    }

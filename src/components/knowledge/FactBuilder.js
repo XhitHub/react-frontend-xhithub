@@ -10,6 +10,7 @@ import PredicateSearch from "./PredicateSearch";
 import PredicatePicker from "./PredicatePicker";
 import SelectableList from "../general/SelectableList";
 import KnowledgeGroupPicker from "../knowledge-group/KnowledgeGroupPicker";
+import PrologMaker from "../general/PrologMaker";
 
 
 class FactBuilder extends Component {
@@ -22,6 +23,8 @@ class FactBuilder extends Component {
          selectedItem: fact
       }
       this.addElement = this.addElement.bind(this);
+      this.prologMaker = new PrologMaker();
+
    }
 
    handleChange(e){
@@ -124,10 +127,16 @@ class FactBuilder extends Component {
      console.log('this.state.fact',this.state.fact);
    }
    onVarChange(e,pred){
-     if(!pred.parameters){
-       pred.parameters = {}
+     // if(!pred.parameters){
+     //   pred.parameters = {}
+     // }
+     // pred.parameters[e.target.name] = e.target.value;
+
+     if(!pred.variables){
+       pred.variables = {}
      }
-     pred.parameters[e.target.name] = e.target.value;
+     pred.variables[e.target.name] = e.target.value;
+
      this.setState({})
      this.props.updateFact(this.state.fact);
      console.log('this.state.fact',this.state.fact);

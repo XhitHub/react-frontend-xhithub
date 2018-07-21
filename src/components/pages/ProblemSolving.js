@@ -101,6 +101,12 @@ class ProblemSolving extends Component {
      this.setState({})
    }
    updateFact(fact){
+     if(this.prologMaker.isFactCheck(fact)){
+       this.state.problemType = 'fact-check'
+     }
+     else{
+       this.state.problemType = 'way-to-goal'
+     }
      this.setState({
        fact: fact
      })
@@ -239,8 +245,16 @@ class ProblemSolving extends Component {
     var kgPickFacts
     var exportRulesBtn, exportFactsBtn, confirmProblemsBtn, plQueryTextarea
     var exportKnowledgeBtn
-    var defineProblemSection
+    var defineProblemSection, knowledgeSelectionSection
     const columns = [
+      {
+        Header: 'Problem type',
+        accessor: 'type', // String-based value accessors!
+        Cell: props =>
+          <p class="">
+            {props.value}
+          </p>
+      },
       {
         Header: 'Fact / goal',
         accessor: 'fact', // String-based value accessors!
@@ -293,6 +307,7 @@ class ProblemSolving extends Component {
       )
     }
     if(this.state.solveMode == 'local'){
+
       exportRulesBtn = (
         <div className="col col-lg-12 text-center">
           <button class="btn btn-primary" onClick={this.exportRules.bind(this)}>Prepare rules</button>
@@ -333,6 +348,55 @@ class ProblemSolving extends Component {
           </div>
         )
       }
+      knowledgeSelectionSection = (
+        <div>
+        <h4 class="">Knowledge to be used:</h4>
+        <div className="row">
+          <div class="col-lg-6">
+            <div className="card kg-div">
+              <div className="card-header">
+              Rules
+              </div>
+              <div className="card-body">
+                <div class="form-group">
+                  <div class="checkbox">
+                    <label><input class="checkbox" type="checkbox" name="exportAllRules" defaultChecked={this.state.exportAllRules} onChange={this.handleChangeChk.bind(this)} />
+                    Use rules from all knowledge groups</label>
+                  </div>
+                </div>
+                {kgPickRules}
+              </div>
+              <div class="card-footer">
+                {exportRulesBtn}
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6 ">
+            <div className="card kg-div">
+              <div className="card-header">
+              Facts
+              </div>
+              <div className="card-body">
+                <div class="form-group">
+                  <div class="checkbox">
+                    <label><input class="checkbox" type="checkbox" name="exportAllFacts" defaultChecked={this.state.exportAllFacts} onChange={this.handleChangeChk.bind(this)} />
+                    Use facts from all knowledge groups</label>
+                  </div>
+                </div>
+                {kgPickFacts}
+              </div>
+              <div class="card-footer">
+                {exportFactsBtn}
+              </div>
+            </div>
+          </div>
+
+        </div>
+        {exportKnowledgeBtn}
+        <hr class="section-divider" />
+        </div>
+      )
     }
     else{
       defineProblemSection = (
@@ -345,6 +409,7 @@ class ProblemSolving extends Component {
           <div class="col-lg-12">
               <div className="card">
                 <div className="card-body">
+                <h4>Problem type: {this.state.problemType}</h4>
                   <FactBuilder updateFact={this.updateFact.bind(this)} factName={''}/>
                 </div>
               </div>
@@ -388,7 +453,7 @@ class ProblemSolving extends Component {
         <hr />
         <h4 class="">Problem solving mode:</h4>
           <div className="row mode-buttons-container">
-          <div className="col offset-lg-2 col-lg-4 text-center">
+          <div className="col offset-lg-0 col-lg-6 text-center">
             <button class={this.state.solveMode == 'server' ? 'btn btn-outline-primary' : 'btn btn-outline-secondary'} onClick={()=>{this.setState({solveMode: 'server'})}}>
               <h3>Server side</h3>
               <p>Solve problems in server side inference engine</p>
@@ -396,7 +461,7 @@ class ProblemSolving extends Component {
               <p>Recommended for solving a few problems</p>
             </button>
           </div>
-          <div className="col col-lg-4 text-center">
+          <div className="col col-lg-6 text-center">
             <button class={this.state.solveMode == 'local' ? 'btn btn-outline-primary' : 'btn btn-outline-secondary'} onClick={()=>{this.setState({solveMode: 'local'})}}>
               <h3>Local</h3>
               <p>Export knowledge and problems to .pl files to be solved in SWI-prolog console</p>
@@ -406,48 +471,7 @@ class ProblemSolving extends Component {
           </div>
         </div>
         <hr class="section-divider" />
-        <h4 class="">Knowledge to be used:</h4>
-        <div className="row">
-          <div class="col-lg-6">
-            <div className="card kg-div">
-              <div className="card-header">
-              Rules
-              </div>
-              <div className="card-body">
-                <div class="form-group">
-                  <div class="checkbox">
-                    <label><input class="checkbox" type="checkbox" name="exportAllRules" defaultChecked={this.state.exportAllRules} onChange={this.handleChangeChk.bind(this)} />
-                    Use rules from all knowledge groups</label>
-                  </div>
-                </div>
-                {kgPickRules}
-                {exportRulesBtn}
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-6 ">
-            <div className="card kg-div">
-              <div className="card-header">
-              Facts
-              </div>
-              <div className="card-body">
-                <div class="form-group">
-                  <div class="checkbox">
-                    <label><input class="checkbox" type="checkbox" name="exportAllFacts" defaultChecked={this.state.exportAllFacts} onChange={this.handleChangeChk.bind(this)} />
-                    Use facts from all knowledge groups</label>
-                  </div>
-                </div>
-                {kgPickFacts}
-                {exportFactsBtn}
-              </div>
-            </div>
-          </div>
-
-        </div>
-        {exportKnowledgeBtn}
-        <hr class="section-divider" />
-
+        {knowledgeSelectionSection}
         {defineProblemSection}
         </div>
 

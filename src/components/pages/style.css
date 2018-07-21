@@ -11,8 +11,8 @@
   height: auto;
 }
 
-.mode-buttons-container{
-  /* width: 70%; */
+.mode-buttons-container .btn{
+  width: 100%;
 }
 
 .kg-div{
