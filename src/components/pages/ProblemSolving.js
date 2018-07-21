@@ -206,6 +206,12 @@ class ProblemSolving extends Component {
           fact: cloneDeep(this.state.fact),
           result: undefined
         }
+      if(!this.state.exportAllFacts){
+        problem.factsKnowledgeGroups = this.state.factsKnowledgeGroups;
+      }
+      if(!this.state.exportAllRules){
+        problem.rulesKnowledgeGroups = this.state.rulesKnowledgeGroups;
+      }
       this.state.problems.push(
         problem
       )

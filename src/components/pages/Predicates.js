@@ -143,11 +143,11 @@ class Predicates extends Component {
             <Predicate predicate={props.value.predicate} mode="READ-FOL" />
           </Link>
       },
-      // {
-      //   Header: 'Details',
-      //   accessor: '_id', // String-based value accessors!
-      //   Cell: props => <Link to={'/predicate/'+props.value}>Details</Link>
-      // },
+      {
+        Header: 'Description',
+        accessor: 'predicatePack.info.description',
+        Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
+      },
       {
         Header: 'Save to memory',
         accessor: 'predicatePack', // String-based value accessors!
@@ -172,57 +172,105 @@ class Predicates extends Component {
             <div>{btn}</div>
           )
         }
+      }
+    ];
+    const columns2 = [
+      {
+        Header: 'Predicate',
+        accessor: 'predicatePack', // String-based value accessors!
+        Cell: props =>
+          <Link to={'/predicate/'+props.value._id}>
+            <Predicate predicate={props.value.predicate} mode="READ-FOL" />
+          </Link>
       },
       {
         Header: 'Description',
         accessor: 'predicatePack.info.description',
         Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
+      },
+      {
+        Header: 'Remove from memory',
+        accessor: 'predicatePack', // String-based value accessors!
+        Cell: props => {
+          var pp = props.value;
+          var idx = memoryPreds.indexOf(pp);
+          var found = memoryPreds.find((item)=>{
+            return item._id == pp._id;
+          })
+          var btn;
+          btn = (
+            <i class="fa fa-times memory pointer" onClick={()=>{this.removeFromMemory(pp)}}></i>
+          )
+          return(
+            <div>{btn}</div>
+          )
+        }
       }
     ];
     return (
       <div className="col col-lg-12">
         <h1>Predicates</h1>
-        <div className="card">
-          <div className="card-header">
-            <div className="row">
-              <div className="col">
-                <table class="table">
-                  <tr>
-                  <td>
-                  <input
-                      className="form-control"
-                      placeholder="keywords"
-                      name="keywords"
-                      type="text"
-                      value={this.state.keywords}
-                      onChange={this.handleChange.bind(this)}
+          <ul class="nav nav-tabs">
+            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#search">Search</a></li>
+            <li class="nav-item"><a class="nav-link " data-toggle="tab" href="#memory">Memory</a></li>
+          </ul>
+          <div class="container-fluid">
+          <div class="tab-content">
+            <div role="tabpanel" id="search" class="tab-pane fade show active">
+              <div className="card">
+                <div className="card-header">
+                  <div className="row">
+                    <div className="col">
+                      <table class="table">
+                        <tr>
+                        <td>
+                        <input
+                            className="form-control"
+                            placeholder="keywords"
+                            name="keywords"
+                            type="text"
+                            value={this.state.keywords}
+                            onChange={this.handleChange.bind(this)}
+                        />
+                        </td>
+                        <td>
+                        <i class="fa fa-search pointer" onClick={this.search.bind(this)}></i>
+                        </td>
+                        <td>
+                          <button class="btn btn-default" onClick={this.clearSearch.bind(this)}>Clear search</button>
+                        </td>
+                        <td>
+                          <Link to={'/create-predicate/'}>
+                            <button class="btn btn-primary pull-right" >Create new predicate</button>
+                          </Link>
+                        </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div className="card-body text-center">
+                  <ReactTable
+                    data={this.state.predicates}
+                    columns={columns}
+                    defaultPageSize="15"
+                    pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
                   />
-                  </td>
-                  <td>
-                  <i class="fa fa-search pointer" onClick={this.search.bind(this)}></i>
-                  </td>
-                  <td>
-                    <button class="btn btn-default" onClick={this.clearSearch.bind(this)}>Clear search</button>
-                  </td>
-                  <td>
-                    <Link to={'/create-predicate/'}>
-                      <button class="btn btn-primary pull-right" >Create new predicate</button>
-                    </Link>
-                  </td>
-                  </tr>
-                </table>
+                </div>
               </div>
             </div>
+            <div role="tabpanel" id="memory" class="tab-pane fade text-center">
+              <ReactTable
+                data={global.wrapData('predicatePack',memoryPreds)}
+                columns={columns2}
+                defaultPageSize="15"
+                pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
+              />
+            </div>
           </div>
-          <div className="card-body text-center">
-            <ReactTable
-              data={this.state.predicates}
-              columns={columns}
-              defaultPageSize="15"
-              pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
-            />
           </div>
-        </div>
+
+
       </div>
 
     );

@@ -75,11 +75,11 @@ class PredicateSearch extends Component {
             <Predicate predicate={props.value.predicate} mode="READ-FOL" />
           </div>
       },
-      {
-        Header: 'Description',
-        accessor: 'pack.info.description',
-        Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
-      }
+      // {
+      //   Header: 'Description',
+      //   accessor: 'pack.info.description',
+      //   Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
+      // }
     ];
     return (
       <div className="">

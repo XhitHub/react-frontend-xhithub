@@ -151,7 +151,7 @@ global.predicateToString = function(p){
         argVar = p.parameters[arg]
       }
       else{
-        argVar = arg
+        argVar = '_'+arg
       }
       args += ", " + argVar
     });
