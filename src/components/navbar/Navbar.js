@@ -38,10 +38,10 @@ class Navbar extends Component {
           url: global.apiUrl + 'users/current-user',
           type: 'get',
           success: (data) => {
+            global.user = data;
             this.setState({
               user: data
             });
-            global.user = data;
           }
         }
         global.simpleAjax(opts);

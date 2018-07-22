@@ -273,7 +273,8 @@ class ProblemSolving extends Component {
             props.value.forEach(item=>{
               var s = '';
               for (var k in item){
-                s += ', ' + k + ': '+item[k];
+                var newKey = k.replace(/___\d+/g,'')
+                s += ', ' + newKey + ': '+ item[k];
               }
               s=s.substring(2);
               solViews.push(
@@ -337,7 +338,7 @@ class ProblemSolving extends Component {
       if(true || this.state.plRules && this.state.plFacts){
         exportKnowledgeBtn=(
           <div class="row">
-            <hr />
+            <hr class="section-divider" />
             <div className="col col-lg-12 text-center">
               <button class="btn btn-primary" onClick={this.exportKnowledge.bind(this)}>
               <h4>Export knowledge</h4>

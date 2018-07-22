@@ -57,14 +57,27 @@ class Template extends Component {
      global.simpleAjax(opts);
    }
   render() {
+    var button;
+    console.log('global.user',global.user)
+    if(true||global.getUserID()){
+      button = (
+        <Link to={'/knowledge-groups'}>
+          <button class="btn btn-primary btn-lg pointer circle-btn start-btn" role="button">Start building knowledge</button>
+        </Link>
+      )
+    }
     return (
       <div className="col col-lg-12">
-      <div class="jumbotron text-center">
+      <div class="home-container text-center">
         <img id="home-pic" src="https://cdn.pixabay.com/photo/2017/04/13/20/26/artificial-intelligence-2228610_960_720.jpg" />
-      <h1 class="display-4">Intelligent collaborated reasoning system</h1>
-      <hr class="my-4" />
-      <p class="">A collaborative reasoning system with Intelligent knowledge base management for maximized knowledge compatibility.</p>
-      <a class="btn btn-primary btn-lg" href="#" role="button">Start building knowledge</a>
+        <div class="div-over-img text-center">
+          <h1 class="display-3">Intelligent collaborated reasoning system</h1>
+          <hr class="my-4" />
+          <p class="">A collaborative reasoning system with Intelligent knowledge base management for maximized knowledge compatibility.</p>
+          <hr class="my-4" />
+          {button}
+        </div>
+
       </div>
       </div>
 

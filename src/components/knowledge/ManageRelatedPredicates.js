@@ -218,9 +218,11 @@ class ManageRelatedPredicates extends Component {
        url: global.apiUrl + 'knowledge/upsert-related-predicates',
        type: 'post',
        success: (data) => {
+         var rpps = [this.state.predicatePack]
+         rpps = rpps.concat(this.state.relatedPredicatePacks)
          if(data){
            alert('Related predicates updated.')
-           localStorage.setItem('relatedPredicatePacks',JSON.stringify(this.state.relatedPredicatePacks));
+           localStorage.setItem('relatedPredicatePacks',JSON.stringify(rpps));
            this.props.history.push('/create-rule/connect-related-predicates');
          }
        },
