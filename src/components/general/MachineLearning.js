@@ -123,6 +123,12 @@ class MachineLearning {
              if(k2 == k){
                dict[k].foundInKnowledge = true
              }
+             if(formula.variables[k2] == k){
+               dict[k].foundInKnowledge = true
+             }
+             if(formula.variables[k2] == '_'+k){
+               dict[k].foundInKnowledge = true
+             }
            }
          }
        }
@@ -228,8 +234,17 @@ class MachineLearning {
        }
      }
      if(formula.variables){
-       if(formula.variables[key]){
-         formula.variables[key] = arg
+       for (var k in formula.variables){
+         if(formula.variables[k] == key){
+           formula.variables[k] = arg
+         }
+         if(formula.variables[k] == '_'+key){
+           formula.variables[k] = '_'+arg
+         }
+         if(k == key){
+           formula.variables[arg] = formula.variables[k]
+           formula.variables[k] = undefined
+         }
        }
      }
      if(formula.and){
@@ -252,7 +267,7 @@ class MachineLearning {
       console.log('gttt tree',tree)
       var newTree = {}
       newTree.dep_ = tree.dep_;
-      newTree.pos_ = tree.pos_;
+      // newTree.pos_ = tree.pos_;
       newTree.children = []
       tree.children.forEach(c=>{
         newTree.children.push(this.getTextTrimmedTree(c));
@@ -322,7 +337,7 @@ class MachineLearning {
       var rule = textToRuleRule.rhs
       argValDict = this.getReverseArgDict(instanceTree, argedTree, argValDict)
       console.log('argValDict',argValDict)
-      this.reverseRuleArgs(rule, argValDict)
+      rule = this.reverseRuleArgs(rule, argValDict)
       return rule
     }
 }

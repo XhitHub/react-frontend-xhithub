@@ -88,7 +88,7 @@ class Predicate extends Component {
       p.arguments.forEach((arg) => {
         args.push(
           <span>
-            <input type="text" name={arg} placeholder={'_'+arg} onChange={(e)=>{this.props.onVarChange(e,this.props.predicate)}}/>
+            <input type="text" name={arg} placeholder={'_'+arg} value={p.variables[arg]} onChange={(e)=>{this.props.onVarChange(e,this.props.predicate)}}/>
             ,
           </span>
         )
