@@ -170,12 +170,13 @@ global.predicateToUniqueString = function(p){
       var argVar;
       if(p.variables && p.variables[arg]){
         argVar = '_var'
+        argVar = p.variables[arg]
       }
       else if(p.parameters && p.parameters[arg]){
         argVar = p.parameters[arg]
       }
       else{
-        argVar = arg
+        argVar = '_' + arg
       }
       args += ", " + argVar
     });

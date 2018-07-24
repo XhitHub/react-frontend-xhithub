@@ -161,7 +161,9 @@ class FactBuilder extends Component {
                   <div class="btn-group" role="group" aria-label="Add elements">
                     <button class="btn btn-default" onClick={()=>{this.addElement({and: []})}}>AND</button>
                     <button class="btn btn-default" onClick={()=>{this.addElement({or: []})}}>OR</button>
-                    <button class="btn btn-default" onClick={()=>{this.addElement({not: {}})}}>NOT</button>
+                    {
+                      //<button class="btn btn-default" onClick={()=>{this.addElement({not: {}})}}>NOT</button>
+                    }
                   </div>
                   <hr />
                   <p>Predicates</p>

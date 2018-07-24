@@ -9,6 +9,7 @@ import Predicate from './Predicate';
 import PredicateSearch from "./PredicateSearch";
 import PredicatePicker from "./PredicatePicker";
 import SelectableList from "../general/SelectableList";
+import MachineLearning from "../general/MachineLearning";
 import KnowledgeGroupPicker from "../knowledge-group/KnowledgeGroupPicker";
 
 
@@ -23,12 +24,27 @@ class CreateRule extends Component {
 
         }
       }
+      rule = {
+        lhs:{
+          text: 'shoots well',
+          arguments: ['human'],
+          variables: {
+            human: '_player'
+          }
+        },
+        rhs:{
+          text: 'goals',
+          arguments: ['player']
+        }
+      }
       this.state = {
          rule: rule,
-         textForm:'',
+         textForm:'if player shoots well, he will goals.',
          selectedItem: rule.lhs
       }
       this.addElement = this.addElement.bind(this);
+      this.machineLearning = new MachineLearning();
+      this.analyzeTextLogicalFormRelationship = this.analyzeTextLogicalFormRelationship.bind(this)
    }
 
    handleChange(e){
@@ -148,10 +164,55 @@ class CreateRule extends Component {
      console.log('this.state.rule',this.state.rule);
    }
    convertToLogicalForm(){
-
+     var opts = {
+       url: global.apiUrl + 'knowledge/get-parse-tree',
+       type: 'post',
+       success: (data) => {
+         console.log('parse tree',data)
+         this.setState({
+           parseTree: data[0].data
+         });
+         var root = data[0].data
+         var dict = {}
+         this.machineLearning.dictFillPron(root,dict)
+         this.machineLearning.dictFillNoun(root,dict)
+         console.log('convertToLogicalForm dict',dict);
+         root = this.machineLearning.replaceHeSheItWithDict(root,dict)
+         console.log('replaceHeSheItWithDict root',root);
+         // root = this.machineLearning.convolute(root,["ADV","PUNCT"],"pos_")
+         // console.log('convolute root',root);
+       },
+       data: JSON.stringify({
+         "text": this.state.textForm
+       })
+     }
+     global.simpleAjax(opts);
+   }
+   analyzeTextLogicalFormRelationship(){
+     this.machineLearning.argizeTreeRule(this.state.parseTree, this.state.rule)
+     console.log('argizeTreeRule')
+     console.log('this.state.parseTree',this.state.parseTree);
+     console.log('this.state.rule',this.state.rule);
+     var trainingPair = {
+       textForm: JSON.stringify(this.state.parseTree),
+       logicalForm: JSON.stringify(this.state.rule)
+     }
+     alert('Text to logical form training record is created successfully.');
+     console.log('trainingPair', trainingPair);
+     var opts = {
+       url: global.apiUrl + 'knowledge/text-logical-pair',
+       type: 'post',
+       success: (data) => {
+         console.log('analyzeTextLogicalFormRelationship post data',data)
+         this.props.history.push('/rule/'+data._id);
+       },
+       data: JSON.stringify(trainingPair)
+     }
+     global.simpleAjax(opts);
    }
    submit(){
      var uniqueCheckString = global.ruleToString(this.state.rule,'unique')
+     console.log('uniqueCheckString',uniqueCheckString)
      var mode = this.props.match.params.mode;
      var knowledgeGroups;
      if(mode == 'connect-related-predicates'){
@@ -196,7 +257,22 @@ class CreateRule extends Component {
                  )
                }
                else{
-                 this.props.history.push('/rule/'+data._id);
+                 //create text to logical training record
+                 var opts2 = {
+                   url: global.apiUrl + 'knowledge/get-parse-tree',
+                   type: 'post',
+                   success: (data) => {
+                     console.log('parse tree',data)
+                     this.setState({
+                       parseTree: data[0].data
+                     });
+                     this.analyzeTextLogicalFormRelationship();
+                   },
+                   data: JSON.stringify({
+                     "text": this.state.textForm
+                   })
+                 }
+                 global.simpleAjax(opts2);
                }
              },
              data: JSON.stringify(rulePack)
@@ -271,6 +347,9 @@ class CreateRule extends Component {
               </div>
               <div className="col col-lg-12 text-center">
                 <button class="btn btn-default" onClick={this.convertToLogicalForm.bind(this)}>Convert to logical form</button>
+              </div>
+              <div className="col col-lg-12 text-center">
+                <button class="btn btn-default" onClick={this.analyzeTextLogicalFormRelationship.bind(this)}>Analyze</button>
               </div>
             </div>
             <div role="tabpanel" id="logicForm" class="tab-pane fade">

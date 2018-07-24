@@ -317,3 +317,13 @@ confirmRelatedPredicates(){
 
 
  this.state.problemType == 'fact-check' ? 'Fact to be checked' : 'Goal to be achieved'
+
+
+
+ argize(token, formula, typesToPreserve, mode, textArgDict, index){
+
+ }
+
+ argizeFormula(text, formula){
+
+ }
