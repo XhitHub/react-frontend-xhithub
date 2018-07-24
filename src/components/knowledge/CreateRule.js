@@ -24,22 +24,22 @@ class CreateRule extends Component {
 
         }
       }
-      rule = {
-        lhs:{
-          text: 'shoots well',
-          arguments: ['human'],
-          variables: {
-            human: '_player'
-          }
-        },
-        rhs:{
-          text: 'goals',
-          arguments: ['player']
-        }
-      }
+      // rule = {
+      //   lhs:{
+      //     text: 'shoots well',
+      //     arguments: ['human'],
+      //     variables: {
+      //       human: '_player'
+      //     }
+      //   },
+      //   rhs:{
+      //     text: 'goals',
+      //     arguments: ['player']
+      //   }
+      // }
       this.state = {
          rule: rule,
-         textForm:'if player shoots well, he will goals.',
+         textForm:'',
          selectedItem: rule.lhs
       }
       this.addElement = this.addElement.bind(this);
@@ -169,18 +169,33 @@ class CreateRule extends Component {
        type: 'post',
        success: (data) => {
          console.log('parse tree',data)
-         this.setState({
-           parseTree: data[0].data
-         });
-         var root = data[0].data
-         var dict = {}
-         this.machineLearning.dictFillPron(root,dict)
-         this.machineLearning.dictFillNoun(root,dict)
-         console.log('convertToLogicalForm dict',dict);
-         root = this.machineLearning.replaceHeSheItWithDict(root,dict)
-         console.log('replaceHeSheItWithDict root',root);
-         // root = this.machineLearning.convolute(root,["ADV","PUNCT"],"pos_")
-         // console.log('convolute root',root);
+         var parseTree = data[0].data
+         var textlessTree = this.machineLearning.getTextTrimmedTree(parseTree)
+         var searchString = JSON.stringify(textlessTree)
+         console.log('convertToLogicalForm searchString',searchString);
+         // search for fitting ttr rules
+         var opts2 = {
+           url: global.apiUrl + 'knowledge/search-text-to-rule-rule',
+           type: 'post',
+           success: (data) => {
+             console.log('search-text-to-rule-rule',data)
+             var ttrRule = data[0]
+             if(ttrRule){
+               var reversedRule = this.machineLearning.getArgsReversedRule(parseTree,ttrRule);
+               alert('Text form is converted to logical form.')
+               this.setState({
+                 rule: reversedRule
+               })
+             }
+             else{
+               alert('Sorry, system does not recognize such text form. Please input the logical form to train system for this text form.')
+             }
+           },
+           data: JSON.stringify({
+             "searchString": searchString
+           })
+         }
+         global.simpleAjax(opts2);
        },
        data: JSON.stringify({
          "text": this.state.textForm
@@ -348,9 +363,11 @@ class CreateRule extends Component {
               <div className="col col-lg-12 text-center">
                 <button class="btn btn-default" onClick={this.convertToLogicalForm.bind(this)}>Convert to logical form</button>
               </div>
-              <div className="col col-lg-12 text-center">
-                <button class="btn btn-default" onClick={this.analyzeTextLogicalFormRelationship.bind(this)}>Analyze</button>
-              </div>
+              {
+              // <div className="col col-lg-12 text-center">
+              //   <button class="btn btn-default" onClick={this.analyzeTextLogicalFormRelationship.bind(this)}>Analyze</button>
+              // </div>
+              }
             </div>
             <div role="tabpanel" id="logicForm" class="tab-pane fade">
               <div class="row">
@@ -373,6 +390,8 @@ class CreateRule extends Component {
               <div className="col col-md-8">
                 <h4>The rule:</h4>
                 <Rule rule={rule} selectedItem={this.state.selectedItem} onSelectItem={this.onSelectItem.bind(this) } mode="EDIT-FOL-VAR"  onVarChange={this.onVarChange.bind(this)}/>
+                <hr />
+                <p>Use "_" or uppercase 1st letter to indicate a term as a variable</p>
               </div>
 
               </div>

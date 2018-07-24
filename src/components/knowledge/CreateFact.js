@@ -220,6 +220,8 @@ class CreateFact extends Component {
               <div className="col col-md-8">
                 <h4>The fact:</h4>
                 <Fact fact={fact} selectedItem={this.state.selectedItem} onSelectItem={this.onSelectItem.bind(this) } mode="EDIT-FOL-VAR"  onVarChange={this.onVarChange.bind(this)}/>
+                  <hr />
+                  <p>Use "_" or uppercase 1st letter to indicate a term as a variable</p>
               </div>
 
               </div>

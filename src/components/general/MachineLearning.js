@@ -247,6 +247,84 @@ class MachineLearning {
      }
      return formula
    }
+
+   getTextTrimmedTree(tree){
+      console.log('gttt tree',tree)
+      var newTree = {}
+      newTree.dep_ = tree.dep_;
+      newTree.pos_ = tree.pos_;
+      newTree.children = []
+      tree.children.forEach(c=>{
+        newTree.children.push(this.getTextTrimmedTree(c));
+      })
+      return newTree
+    }
+
+    getReverseArgDict(instanceTree, argedTree, argValDict){
+      console.log('getReverseArgDict argedTree',argedTree)
+      console.log('argedTree.text.substring(0,3)',argedTree.text.substring(0,3))
+      if(argedTree.text.length > 3 && argedTree.text.substring(0,4) == 'arg_'){
+        argValDict[argedTree.text] = instanceTree.text
+      }
+      for(var i = 0; i < argedTree.children.length; i++){
+        this.getReverseArgDict(instanceTree.children[i], argedTree.children[i], argValDict)
+      }
+      return argValDict
+    }
+
+    reverseFormulaArgs(formula, argValDict){
+      if(formula.text){
+        for(var k in argValDict){
+          var regex = new RegExp(k,"g");
+          formula.text = formula.text.replace(regex,argValDict[k])
+        }
+      }
+      if(formula.arguments){
+        for(var i = 0; i < formula.arguments.length; i++){
+          if(argValDict[formula.arguments[i]]){
+            formula.arguments[i] = argValDict[formula.arguments[i]]
+          }
+        }
+      }
+      if(formula.variables){
+        for(var k in formula.variables){
+          if(argValDict[formula.variables[k]]){
+            formula.variables[k] = argValDict[formula.variables[k]]
+          }
+        }
+      }
+
+      if(formula.and){
+        formula.and.forEach(item=>{
+          this.reverseFormulaArgs(item, argValDict)
+        })
+      }
+      if(formula.or){
+        formula.or.forEach(item=>{
+          this.reverseFormulaArgs(item, argValDict)
+        })
+      }
+      if(formula.not){
+        this.reverseFormulaArgs(formula.not, argValDict)
+      }
+      return formula
+    }
+
+    reverseRuleArgs(rule, argValDict){
+      this.reverseFormulaArgs(rule.lhs, argValDict)
+      this.reverseFormulaArgs(rule.rhs, argValDict)
+      return rule;
+    }
+
+    getArgsReversedRule(instanceTree, textToRuleRule){
+      var argValDict = {}
+      var argedTree = textToRuleRule.lhs
+      var rule = textToRuleRule.rhs
+      argValDict = this.getReverseArgDict(instanceTree, argedTree, argValDict)
+      console.log('argValDict',argValDict)
+      this.reverseRuleArgs(rule, argValDict)
+      return rule
+    }
 }
 
 export default MachineLearning;
