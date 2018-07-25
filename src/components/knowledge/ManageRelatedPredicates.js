@@ -29,6 +29,7 @@ class ManageRelatedPredicates extends Component {
       this.addUnrelatedPredicate = this.addUnrelatedPredicate.bind(this)
       this.removeRelatedPredicate = this.removeRelatedPredicate.bind(this)
       this.removeUnrelatedPredicate = this.removeUnrelatedPredicate.bind(this)
+      this.findExtraRelatedPredicates = this.findExtraRelatedPredicates.bind(this)
    }
 
    handleChange(e){
@@ -49,6 +50,7 @@ class ManageRelatedPredicates extends Component {
             predicatePack: data
           });
           this.findRelatedPredicates();
+          this.findExtraRelatedPredicates();
         }
       }
       global.simpleAjax(opts);
@@ -81,6 +83,125 @@ class ManageRelatedPredicates extends Component {
       console.log('Component WILL UNMOUNT!')
    }
 
+   findExtraRelatedPredicates(){
+     var pid = this.props.match.params.id;
+     var predPack = this.state.predicatePack;
+     var allSynonymsList = predPack.altFormInfo.allSynonymsList;
+     var powerset = Combinatorics.power(allSynonymsList);
+     powerset = powerset.filter((item)=>{
+       return item.length >= allSynonymsList.length - 1;
+     })
+     // powerset = [allSynonymsList]
+     powerset.forEach(set=>{
+       var opts = {
+         url: global.apiUrl + 'knowledge/search-b-model-rule',
+         type: 'post',
+         success: (data) => {
+           console.log('findExtraRelatedPredicates',data)
+           data.forEach(rule=>{
+             var opts2 = {
+               url: global.apiUrl + 'knowledge/get-predicate-alternative-forms-by-synonyms',
+               type: 'post',
+               data: JSON.stringify(
+                 {
+                   synonyms: rule.rhs,
+                   passCount: rule.rhs.length
+                 }
+               ),
+               success: (relatedPredicatePacks) => {
+                 var relatedPredicatesList = this.state.relatedPredicatesList
+                 if(relatedPredicatePacks.length > 0){
+                   relatedPredicatePacks.forEach((relatedPredicatePack)=>{
+                     // var obj = {
+                     //   relatedPredicatePack: relatedPredicatePack,
+                     //   matchCount: words.length
+                     // }
+                     relatedPredicatePack.matchCount = rule.rhs.length
+                     if(
+                       relatedPredicatePack._id != pid
+                       &&
+                       !relatedPredicatesList.find((item)=>{
+                         return item._id == relatedPredicatePack._id;
+                       })
+                     ){
+                       relatedPredicatesList.push(relatedPredicatePack);
+                     }
+                   })
+                 }
+                 relatedPredicatesList.sort((a,b)=>{
+                   return -( a.matchCount - b.matchCount );
+                 })
+                 this.setState({
+                 });
+               }
+             }
+             global.simpleAjax(opts2);
+           })
+         },
+         data: JSON.stringify({
+           "synonyms": set
+         })
+       }
+       global.simpleAjax(opts);
+     })
+   }
+
+   findRelatedPredicatesFunction(words, allSynonymsDict){
+     var pid = this.props.match.params.id;
+     var relatedPreds = [];
+     var relatedPredsList = [];
+     var wordsSyns = [];
+     words.forEach((word)=>{
+       var syns = allSynonymsDict[word];
+       wordsSyns = wordsSyns.concat(syns);
+     });
+     console.log('wordsSyns',wordsSyns);
+     // search with the syns
+     var opts = {
+       url: global.apiUrl + 'knowledge/get-predicate-alternative-forms-by-synonyms',
+       type: 'post',
+       data: JSON.stringify(
+         {
+           synonyms: wordsSyns,
+           passCount: words.length
+         }
+       ),
+       success: (data) => {
+         if(data.length > 0){
+           var relatedPredsItem = {
+             words: words,
+             relatedPredicates: data
+           }
+           data.forEach((relatedPredicatePack)=>{
+             // var obj = {
+             //   relatedPredicatePack: relatedPredicatePack,
+             //   matchCount: words.length
+             // }
+             relatedPredicatePack.matchCount = words.length
+             if(
+               relatedPredicatePack._id != pid
+               &&
+               !relatedPredsList.find((item)=>{
+                 return item._id == relatedPredicatePack._id;
+               })
+             ){
+               relatedPredsList.push(relatedPredicatePack);
+             }
+           })
+           relatedPreds.push(relatedPredsItem);
+         }
+         relatedPredsList.sort((a,b)=>{
+           return -( a.matchCount - b.matchCount );
+         })
+         this.setState({
+           relatedPredicates: relatedPreds,
+           relatedPredicatesList: relatedPredsList
+         });
+       }
+     }
+     global.simpleAjax(opts);
+   }
+
    findRelatedPredicates(){
      var pid = this.props.match.params.id;
      var predPack = this.state.predicatePack;
@@ -92,8 +213,6 @@ class ManageRelatedPredicates extends Component {
      var predWordsPowerSet = Combinatorics.power(predWords);
      console.log('predWordsPowerSet',predWordsPowerSet);
      // TODO: filter powersets, no too small ones
-     var relatedPreds = [];
-     var relatedPredsList = [];
      predWordsPowerSet = predWordsPowerSet.filter((item)=>{
        return item.length > 0;
      })
@@ -101,56 +220,7 @@ class ManageRelatedPredicates extends Component {
        return -( a.length - b.length )
      })
      predWordsPowerSet.forEach((words) => {
-       var wordsSyns = [];
-       words.forEach((word)=>{
-         var syns = allSynonymsDict[word];
-         wordsSyns = wordsSyns.concat(syns);
-       });
-       console.log('wordsSyns',wordsSyns);
-       // search with the syns
-       var opts = {
-         url: global.apiUrl + 'knowledge/get-predicate-alternative-forms-by-synonyms',
-         type: 'post',
-         data: JSON.stringify(
-           {
-             synonyms: wordsSyns,
-             passCount: words.length
-           }
-         ),
-         success: (data) => {
-           if(data.length > 0){
-             var relatedPredsItem = {
-               words: words,
-               relatedPredicates: data
-             }
-             data.forEach((relatedPredicatePack)=>{
-               // var obj = {
-               //   relatedPredicatePack: relatedPredicatePack,
-               //   matchCount: words.length
-               // }
-               relatedPredicatePack.matchCount = words.length
-               if(
-                 relatedPredicatePack._id != pid
-                 &&
-                 !relatedPredsList.find((item)=>{
-                   return item._id == relatedPredicatePack._id;
-                 })
-               ){
-                 relatedPredsList.push(relatedPredicatePack);
-               }
-             })
-             relatedPreds.push(relatedPredsItem);
-           }
-           relatedPredsList.sort((a,b)=>{
-             return -( a.matchCount - b.matchCount );
-           })
-           this.setState({
-             relatedPredicates: relatedPreds,
-             relatedPredicatesList: relatedPredsList
-           });
-         }
-       }
-       global.simpleAjax(opts);
+      this.findRelatedPredicatesFunction(words, allSynonymsDict)
      })
    }
 
