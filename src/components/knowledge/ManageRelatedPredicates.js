@@ -159,8 +159,23 @@ class ManageRelatedPredicates extends Component {
      this.setState({});
    }
 
+   addExtraRelatedPredicate(predPack){
+     console.log('addRelatedPredicate predPack',predPack)
+     predPack.isExtra = true
+     var rpps = this.state.relatedPredicatePacks;
+     if(!rpps.find(rpp=>{
+       return rpp._id == predPack._id
+     })){
+       rpps.push(predPack)
+     }
+     this.setState({
+       relatedPredicatePacks:rpps
+     })
+   }
+
    addRelatedPredicate(predPack){
      console.log('addRelatedPredicate predPack',predPack)
+     predPack.isExtra = false
      var rpps = this.state.relatedPredicatePacks;
      if(!rpps.find(rpp=>{
        return rpp._id == predPack._id
@@ -174,6 +189,7 @@ class ManageRelatedPredicates extends Component {
 
    addUnrelatedPredicate(predPack){
      console.log('addRelatedPredicate predPack',predPack)
+     predPack.isExtra = false
      var rpps = this.state.unrelatedPredicatePacks;
      if(!rpps.find(rpp=>{
        return rpp._id == predPack._id
@@ -361,7 +377,7 @@ class ManageRelatedPredicates extends Component {
         {relatedPredicatesView}
         <hr />
         <h4>Pick related predicates we did not think of</h4>
-        <PredicatePicker mode="" onSelectItem={this.addRelatedPredicate.bind(this)} />
+        <PredicatePicker mode="" onSelectItem={this.addExtraRelatedPredicate.bind(this)} />
       </div>
 
     );

@@ -239,7 +239,7 @@ class MachineLearning {
            formula.variables[k] = arg
          }
          if(formula.variables[k] == '_'+key){
-           formula.variables[k] = '_'+arg
+           formula.variables[k] = arg
          }
          if(k == key){
            formula.variables[arg] = formula.variables[k]
@@ -303,6 +303,9 @@ class MachineLearning {
       }
       if(formula.variables){
         for(var k in formula.variables){
+          var qwe = formula.variables[k]
+          console.log('[formula.variables[k]]',formula.variables[k])
+            console.log('argValDict[formula.variables[k]]',argValDict[qwe])
           if(argValDict[formula.variables[k]]){
             formula.variables[k] = argValDict[formula.variables[k]]
           }

@@ -193,7 +193,12 @@ class CreatePredicate extends Component {
        url: global.apiUrl + 'knowledge/predicate/',
        type: 'post',
        success: (data) => {
+         console.log('create pred submit data',data)
          alert('Predicate created successfully.');
+         var memoryPreds = JSON.parse(localStorage.getItem('predicatesPacksPool'));
+         memoryPreds.push(data)
+         localStorage.setItem('predicatesPacksPool',JSON.stringify(memoryPreds));
+         this.setState({});
          this.props.history.push('/manage-related-predicates/'+data._id);
        },
        data: JSON.stringify(predPack)
