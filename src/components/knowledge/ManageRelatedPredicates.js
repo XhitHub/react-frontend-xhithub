@@ -23,6 +23,7 @@ class ManageRelatedPredicates extends Component {
          relatedPredicates: null,
          relatedPredicatePacks: [],
          unrelatedPredicatePacks: [],
+         relatedPredicatesList: [],
          oldId: null
       }
       this.addRelatedPredicate = this.addRelatedPredicate.bind(this)

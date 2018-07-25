@@ -86,6 +86,27 @@ class MachineLearning {
      return token
    }
 
+   convolutePreserveContent(token, typesToTrim, mode){
+     if(typesToTrim.find(type=>{
+       return type == token[mode]
+     })){
+       token[mode] = ''
+     }
+     token.children.forEach(child=>{
+       this.convolutePreserveContent(child, typesToTrim, mode)
+     })
+     return token
+   }
+
+   convoluteBracketsForSearchString(s){
+     s = s.replace(/[\[\{\]\},]/g,'')
+     return s;
+   }
+
+   convolutePreserveContentRuleDefault(token){
+     return this.convolutePreserveContent(token, ['amod','compound','advmod'],'dep_')
+   }
+
    fillArgsDictByTree(token,dict,index = 0){
      if(!dict[token.text]){
        dict[token.text] = {
@@ -100,6 +121,13 @@ class MachineLearning {
      }
      token.children.forEach(child=>{
        this.fillArgsDictByTree(child, dict,index)
+     })
+     return dict
+   }
+
+   fillArgsDictByPOS(pos,dict,index = 0){
+     pos.forEach(item=>{
+
      })
      return dict
    }
@@ -276,13 +304,15 @@ class MachineLearning {
     }
 
     getReverseArgDict(instanceTree, argedTree, argValDict){
-      console.log('getReverseArgDict argedTree',argedTree)
-      console.log('argedTree.text.substring(0,3)',argedTree.text.substring(0,3))
-      if(argedTree.text.length > 3 && argedTree.text.substring(0,4) == 'arg_'){
-        argValDict[argedTree.text] = instanceTree.text
-      }
-      for(var i = 0; i < argedTree.children.length; i++){
-        this.getReverseArgDict(instanceTree.children[i], argedTree.children[i], argValDict)
+      if(instanceTree && argedTree){
+        console.log('getReverseArgDict argedTree',argedTree)
+        console.log('argedTree.text.substring(0,3)',argedTree.text.substring(0,3))
+        if(argedTree.text.length > 3 && argedTree.text.substring(0,4) == 'arg_'){
+          argValDict[argedTree.text] = instanceTree.text
+        }
+        for(var i = 0; i < argedTree.children.length; i++){
+          this.getReverseArgDict(instanceTree.children[i], argedTree.children[i], argValDict)
+        }
       }
       return argValDict
     }

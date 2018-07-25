@@ -171,9 +171,7 @@ class CreateRule extends Component {
          console.log('parse tree',data)
          var parseTree = data[0].data
          var textlessTree = this.machineLearning.getTextTrimmedTree(parseTree)
-         var convolTree = this.machineLearning.convolutePreserveContentRuleDefault(textlessTree)
-         // var searchString = this.machineLearning.convoluteBracketsForSearchString(JSON.stringify(convolTree))
-         var searchString = JSON.stringify(convolTree)
+         var searchString = JSON.stringify(textlessTree)
          console.log('convertToLogicalForm searchString',searchString);
          // search for fitting ttr rules
          var opts2 = {
@@ -205,14 +203,8 @@ class CreateRule extends Component {
      }
      global.simpleAjax(opts);
    }
-   analyzeTextLogicalFormRelationshipPOS(){
-     this.machineLearning.argizePOSRule(this.state.parseTree, this.state.rule)
-   }
-
    analyzeTextLogicalFormRelationship(){
      this.machineLearning.argizeTreeRule(this.state.parseTree, this.state.rule)
-     //convolute
-     this.state.parseTree = this.machineLearning.convolutePreserveContentRuleDefault(this.state.parseTree)
      console.log('argizeTreeRule')
      console.log('this.state.parseTree',this.state.parseTree);
      console.log('this.state.rule',this.state.rule);
@@ -296,22 +288,6 @@ class CreateRule extends Component {
                    })
                  }
                  global.simpleAjax(opts2);
-
-                 // var opts3 = {
-                 //   url: global.apiUrl + 'knowledge/get-pos',
-                 //   type: 'post',
-                 //   success: (data) => {
-                 //     console.log('parse tree',data)
-                 //     this.setState({
-                 //       pos: data[0]
-                 //     });
-                 //     this.analyzeTextLogicalFormRelationshipPOS();
-                 //   },
-                 //   data: JSON.stringify({
-                 //     "text": this.state.textForm
-                 //   })
-                 // }
-                 // global.simpleAjax(opts3);
                }
              },
              data: JSON.stringify(rulePack)
